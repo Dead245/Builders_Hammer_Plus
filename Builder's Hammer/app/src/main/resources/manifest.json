@@ -1,0 +1,22 @@
+{
+  "Group": "DeadWolf",
+  "Name": "Builder's Hammer",
+  "Version": "1.0.1",
+  "Description": "Adds extra functionality to the hammer for utility for Hytale builders.",
+  "Authors": [
+    {
+      "Name": "DeadWolf",
+      "Email": "",
+      "Url": ""
+    }
+  ],
+  "Website": "",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "ServerVersion": "*",
+  "LoadBefore": {},
+  "DisabledByDefault": false,
+  "IncludesAssetPack": true,
+  "SubPlugins": [],
+  "Main": "buildershammer.BuildersHammer"
+}

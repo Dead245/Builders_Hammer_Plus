@@ -1,0 +1,21 @@
+{
+  "Group": "Testing Plugins - DeadWolf",
+  "Name": "First Plugin Testing by DeadWolf",
+  "Version": "0.0.1",
+  "Description": "My first plugin.",
+  "Authors": [
+    {
+      "Name": "DeadWolf",
+      "Email": "",
+      "Url": ""
+    }
+  ],
+  "Website": "",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "LoadBefore": {},
+  "DisabledByDefault": false,
+  "IncludesAssetPack": true,
+  "SubPlugins": [],
+  "main": "deadwolf"
+}

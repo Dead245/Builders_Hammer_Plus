@@ -1,0 +1,7 @@
+{
+  "Type": "BuilderRotateY",
+  "RunTime": 0.1,
+  "Effects": {
+            "ItemAnimationId": "Mine"
+          }
+}
