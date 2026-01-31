@@ -45,6 +45,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
     protected void interactWithBlock(@Nonnull World world, @Nonnull CommandBuffer<EntityStore> cmdBuffer,
         @Nonnull InteractionType intType, @Nonnull InteractionContext intCxt, @Nullable ItemStack itmStk,
         @Nonnull Vector3i blockPos, @Nonnull CooldownHandler cooldownHndlr) {
+        //BuilderChangeState Interaction
         Ref<EntityStore> userRef = intCxt.getEntity();
         Store<EntityStore> store = userRef.getStore();
         Player playerComponent = cmdBuffer.getComponent(userRef, Player.getComponentType());
@@ -71,7 +72,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
         BlockChunk blockChunkComponent = chkStoreStore.getComponent(chunkReference, BlockChunk.getComponentType());
         assert blockChunkComponent != null;
         
-        //Remove durability from the held item
+        //Remove durability from the held item, pulled from vanilla hammer, doesn't work?
         ItemStack heldItem = intCxt.getHeldItem();
         if (heldItem != null && playerComponent.canDecreaseItemStackDurability(userRef, (ComponentAccessor)store) && !heldItem.isUnbreakable()) {
             playerComponent.updateItemStackDurability(userRef, heldItem, playerComponent.getInventory().getHotbar(), intCxt.getHeldItemSlot(), -heldItem.getItem().getDurabilityLossOnHit(), (ComponentAccessor)cmdBuffer);

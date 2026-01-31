@@ -89,7 +89,7 @@ public class HammerRotationY extends SimpleBlockInteraction {
             //return;
         //}
 
-        //Remove durability from the held item
+        //Remove durability from the held item, pulled from vanilla hammer, doesn't work?
         ItemStack heldItem = intCxt.getHeldItem();
         if (heldItem != null && playerComponent.canDecreaseItemStackDurability(ref, (ComponentAccessor)store) && !heldItem.isUnbreakable()) {
             playerComponent.updateItemStackDurability(ref, heldItem, playerComponent.getInventory().getHotbar(), intCxt.getHeldItemSlot(), -heldItem.getItem().getDurabilityLossOnHit(), (ComponentAccessor)cmdBuffer);
