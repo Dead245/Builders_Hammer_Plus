@@ -1,2 +1,2 @@
 items.Builders_Hammer.name=Thorium Builder's Hammer
-items.Builders_Hammer.description=A more advanced Builder's Hammer with more functionality.\nLeft click to cycle through a block's possible group.\nRight click a rotatable block to rotate it. Crouching changes rotate direction.\n<i>More functionality planned in the future<i>
+item.advanced_builder_hammer.desc=An advanced Builder’s Hammer with expanded functionality.\n\nLeft Click: Cycle block set\nLeft Click + Crouch: Cycle block states\n\nRight Click: Rotate around the vertical axis\nRight Click + Crouch: Change block orientation
