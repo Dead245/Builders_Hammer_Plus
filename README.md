@@ -2,7 +2,7 @@
 
 Mod for Hytale.
 
-Adds 1 item with custom interactions, the Thorium Builder's Hammer.
+Adds more functionality to the vanilla Builder's Hammers.  Also adds 1 new hammer, the the Thorium Builder's Hammer.
 
 <img width="582" height="373" alt="HammerDescription" src="https://github.com/user-attachments/assets/136c9006-b1ed-48ad-997a-0fd0d9389a6a" />
 
