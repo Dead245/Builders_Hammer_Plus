@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Builders_Hammer.name",
-    "Description": "server.items.Builders_Hammer.description"
+    "Name": "server.items.BHP_Thorium_Builders_Hammer.name",
+    "Description": "server.items.BHP_Thorium_Builders_Hammer.description"
   },
   "Parent": "Tool_Hammer_Crude",
   "Icon": "Icons/ItemsGenerated/Builders_Hammer.png",
@@ -74,16 +74,9 @@
     ]
   },
   "Light": {
-    "Radius": 10
+    "Radius": 2,
+    "Color": "#dfd"
   },
-  "Particles": [
-    {
-      "TargetEntityPart": "PrimaryItem",
-      "SystemId": "Fire_Green",
-      "Scale": 0.5,
-      "TargetNodeName": "Hammer"
-    }
-  ],
   "ItemEntity": {
     "ShowItemParticles": false
   }

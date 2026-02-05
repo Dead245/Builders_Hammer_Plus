@@ -14,9 +14,11 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.VariantRotation;
 import com.hypixel.hytale.server.core.asset.type.gameplay.GameplayConfig;
@@ -26,6 +28,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -107,6 +110,15 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         //The function I need to set the block with new rotation
         worldChunkComponent.setBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockID, targetBlockType, rotation, 0, 256);
         state.state = InteractionState.Finished;
+
+        //Add sound when editing the block, pulled from CycleBlockGroup interaction
+        BlockSoundSet soundSet = BlockSoundSet.getAssetMap().getAsset(targetBlockType.getBlockSoundSetIndex());    
+        if (soundSet != null) {
+            int soundEventIndex = soundSet.getSoundEventIndices().getOrDefault(BlockSoundEvent.Hit, 0);
+            if (soundEventIndex != 0) {
+                SoundUtil.playSoundEvent3d(ref, soundEventIndex, blockPos.x + 0.5D, blockPos.y + 0.5D, blockPos.z + 0.5D, (ComponentAccessor)cmdBuffer);
+            }
+        } 
     }
     
     @Override

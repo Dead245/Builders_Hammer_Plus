@@ -1,2 +1,6 @@
-items.Builders_Hammer.name=Thorium Builder's Hammer
-items.Builders_Hammer.description=An advanced Builder’s Hammer with expanded functionality.\n\nLeft Click: Cycle block set\nLeft Click + Crouch: Cycle block states\n\nRight Click: Rotate around the vertical axis\nRight Click + Crouch: Change block orientation
+items.BHP_Thorium_Builders_Hammer.name=Thorium Builder's Hammer+
+items.BHP_Thorium_Builders_Hammer.description=An advanced Builder’s Hammer with expanded functionality.\n\nLeft Click: Cycle block set\nLeft Click + Crouch: Cycle block states\n\nRight Click: Rotate around the vertical axis\nRight Click + Crouch: Change block orientation\n\n<i>(Tip: Hold 'Q' (your 'Select Block From Set' keybind) while holding a block to swap through the block's block set.)<i>
+items.BHP_Crude_Builders_Hammer.name= Crude Builder's Hammer+
+items.BHP_Crude_Builders_Hammer.description=An advanced Builder’s Hammer with expanded functionality.\n\nLeft Click: Cycle block set\nLeft Click + Crouch: Cycle block states\n\nRight Click: Rotate around the vertical axis\nRight Click + Crouch: Change block orientation\n\n<i>(Tip: Hold 'Q' (your 'Select Block From Set' keybind) while holding a block to swap through the block's block set.)<i>
+items.BHP_Iron_Builders_Hammer.name=Iron Builder's Hammer+
+items.BHP_Iron_Builders_Hammer.description=An advanced Builder’s Hammer with expanded functionality.\n\nLeft Click: Cycle block set\nLeft Click + Crouch: Cycle block states\n\nRight Click: Rotate around the vertical axis\nRight Click + Crouch: Change block orientation\n\n<i>(Tip: Hold 'Q' (your 'Select Block From Set' keybind) while holding a block to swap through the block's block set.)<i>

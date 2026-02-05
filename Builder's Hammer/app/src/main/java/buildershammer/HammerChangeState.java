@@ -1,9 +1,7 @@
 package buildershammer;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -18,10 +16,11 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
-import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.StateData;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -29,12 +28,13 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-//Block states seem to not be fully implemented yet? so this function is not complete until then...
+
 public class HammerChangeState extends SimpleBlockInteraction {
     //Used as one part to register the interaction
     public static final BuilderCodec<HammerChangeState> CODEC = BuilderCodec.builder(
@@ -117,6 +117,15 @@ public class HammerChangeState extends SimpleBlockInteraction {
 
         stData.getBlockForState(states.get(stateIndex));
         worldChunkComponent.setBlockInteractionState(blockPos, blockType, states.get(stateIndex));
+
+        //Add sound when editing the block, pulled from CycleBlockGroup interaction
+        BlockSoundSet soundSet = BlockSoundSet.getAssetMap().getAsset(blockType.getBlockSoundSetIndex());    
+        if (soundSet != null) {
+            int soundEventIndex = soundSet.getSoundEventIndices().getOrDefault(BlockSoundEvent.Hit, 0);
+            if (soundEventIndex != 0) {
+                SoundUtil.playSoundEvent3d(userRef, soundEventIndex, blockPos.x + 0.5D, blockPos.y + 0.5D, blockPos.z + 0.5D, (ComponentAccessor)cmdBuffer);
+            }
+        } 
     }
 
     @Override

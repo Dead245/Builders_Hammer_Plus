@@ -44,8 +44,8 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
-//TODO: change name and version
+//change name and version here
 tasks.jar {
     archiveBaseName.set("BuildersHammer")
-    archiveVersion.set("1.1.0")
+    archiveVersion.set("1.2.0")
 }
