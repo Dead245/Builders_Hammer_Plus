@@ -77,6 +77,11 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         GameplayConfig gameplayConfig = world.getGameplayConfig();
         WorldConfig worldConfig = gameplayConfig.getWorldConfig();
         
+        //Get config values
+        BuildersHammer bHammer = BuildersHammer.getInstance();
+        boolean permission = bHammer.canEdit(worldChunkComponent.getBlockType(blockPos).getId(), playerComponent.getGameMode().name(), "");
+        if(!permission) return;
+
         boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
         if (!blockBreakingAllowed) return;
 

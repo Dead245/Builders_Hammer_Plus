@@ -2,6 +2,7 @@ package buildershammer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -20,9 +21,12 @@ import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.StateData;
+import com.hypixel.hytale.server.core.asset.type.gameplay.GameplayConfig;
+import com.hypixel.hytale.server.core.asset.type.gameplay.WorldConfig;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -36,6 +40,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 public class HammerChangeState extends SimpleBlockInteraction {
+    
     //Used as one part to register the interaction
     public static final BuilderCodec<HammerChangeState> CODEC = BuilderCodec.builder(
             HammerChangeState.class, HammerChangeState::new, SimpleBlockInteraction.CODEC
@@ -58,7 +63,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
          .atMostEvery(5, TimeUnit.MINUTES)).log("HammerChangeState requires a Player but was used for: %s", userRef);
          return;
         }
-        
+
         ChunkStore chkStore = world.getChunkStore();
         Store<ChunkStore> chkStoreStore = chkStore.getStore();
 
@@ -72,50 +77,41 @@ public class HammerChangeState extends SimpleBlockInteraction {
         BlockChunk blockChunkComponent = chkStoreStore.getComponent(chunkReference, BlockChunk.getComponentType());
         assert blockChunkComponent != null;
         
+        BlockType blockType = worldChunkComponent.getBlockType(blockPos);
+
+        //Make sure player can change/edit blocks first
+        GameplayConfig gameplayConfig = world.getGameplayConfig();
+        WorldConfig worldConfig = gameplayConfig.getWorldConfig();
+
+        boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
+        if (!blockBreakingAllowed) return;
+
+        //Get config values
+        BuildersHammer bHammer = BuildersHammer.getInstance();
+        boolean permission = bHammer.canEdit(blockType.getId(), playerComponent.getGameMode().name(), "");
+        if(!permission) return;
+
         //Remove durability from the held item, pulled from vanilla hammer, doesn't work?
         ItemStack heldItem = intCxt.getHeldItem();
         if (heldItem != null && playerComponent.canDecreaseItemStackDurability(userRef, (ComponentAccessor)store) && !heldItem.isUnbreakable()) {
             playerComponent.updateItemStackDurability(userRef, heldItem, playerComponent.getInventory().getHotbar(), intCxt.getHeldItemSlot(), -heldItem.getItem().getDurabilityLossOnHit(), (ComponentAccessor)cmdBuffer);
         }
-        
-        BlockType blockType = worldChunkComponent.getBlockType(blockPos);
+
         StateData stData = blockType.getState();
         if (stData == null) return;
-        
-        //This is *very* hacky, 90% chance it will break in the future
-        String data = stData.toString(); //This is how I get the definitions lmao
 
-        List<String> states = new ArrayList<>();
-        states.add("default");
+        //I guess this is the proper way to get the states?
+        Map<String, Integer> packetData = stData.toPacket(blockType);
 
-        int start = data.indexOf('{',data.indexOf("stateToBlock"));
-        int end = data.indexOf('}');
-        String stateList = data.substring(start+1, end);
-        
-        String[] keys = stateList.split(",");
-        for(String key : keys){
-            key = key.trim();
-            if(key.isEmpty()) continue;
+        List<String> states = new ArrayList<>(packetData.keySet());
+        states.add(0,"default");
 
-            int endOfKey = key.indexOf('=');
-            if (endOfKey > 0){
-                states.add(key.substring(0,endOfKey));
-            }
-        }
-        //Now I have all the state keys in a list :)
         String currState = blockType.getStateForBlock(blockType); //current state
-        int stateIndex = 0;
-        for (int i = 0; i < states.size(); i++){
-            if(states.get(i).equals(currState)){
-                stateIndex = i;
-            }
-        }
-        stateIndex++;
-        if(stateIndex > states.size()-1){
-            stateIndex = 0;
-        }
+        int stateIndex = states.indexOf(currState);
+        if (stateIndex == -1) stateIndex = 0;
 
-        stData.getBlockForState(states.get(stateIndex));
+        stateIndex = (stateIndex + 1) % states.size();
+
         worldChunkComponent.setBlockInteractionState(blockPos, blockType, states.get(stateIndex));
 
         //Add sound when editing the block, pulled from CycleBlockGroup interaction
@@ -132,6 +128,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
     protected void simulateInteractWithBlock(@Nonnull InteractionType intType, @Nonnull InteractionContext intCxt,
             @Nullable ItemStack itmStk, @Nonnull World world, @Nonnull Vector3i blockPos) {
                 //Needed to be overridden, but not used in this interaction
+                //...What is this for?
     }
     
 }

@@ -47,5 +47,5 @@ tasks.named<Test>("test") {
 //change name and version here
 tasks.jar {
     archiveBaseName.set("BuildersHammer")
-    archiveVersion.set("1.2.0")
+    archiveVersion.set("1.3.0")
 }

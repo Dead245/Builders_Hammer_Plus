@@ -80,6 +80,11 @@ public class HammerRotationY extends SimpleBlockInteraction {
         boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
         if (!blockBreakingAllowed) return;
         
+        //Get config values
+        BuildersHammer bHammer = BuildersHammer.getInstance();
+        boolean permission = bHammer.canEdit(worldChunkComponent.getBlockType(blockPos).getId(), playerComponent.getGameMode().name(), "");
+        if(!permission) return;
+
         int blockIndex = world.getBlock(blockPos);
         BlockType targetBlockType = BlockType.getAssetMap().getAsset(blockIndex);
         if (targetBlockType == null) {
