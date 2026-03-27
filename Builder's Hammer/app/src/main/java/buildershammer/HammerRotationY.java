@@ -97,14 +97,7 @@ public class HammerRotationY extends SimpleBlockInteraction {
             //return;
         //}
 
-        //Remove durability from the held item, pulled from vanilla hammer, doesn't work?
-        ItemStack heldItem = intCxt.getHeldItem();
-        if (heldItem != null && playerComponent.canDecreaseItemStackDurability(ref, (ComponentAccessor)store) && !heldItem.isUnbreakable()) {
-            playerComponent.updateItemStackDurability(ref, heldItem, playerComponent.getInventory().getHotbar(), intCxt.getHeldItemSlot(), -heldItem.getItem().getDurabilityLossOnHit(), (ComponentAccessor)cmdBuffer);
-        }
-
-        //!!! Deprecated method getRotationIndex, marked for removal
-        int rotation = worldChunkComponent.getRotationIndex(blockPos.x, blockPos.y, blockPos.z);
+        int rotation = world.getBlockRotationIndex(blockPos.x, blockPos.y, blockPos.z);
         if (rotation < 4){
             rotation = (rotation + 1) % 4; //Cycle rotation 0-3
         } else if (rotation >= 4 && rotation < 8){

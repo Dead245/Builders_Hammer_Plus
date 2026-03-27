@@ -91,12 +91,6 @@ public class HammerChangeState extends SimpleBlockInteraction {
         boolean permission = bHammer.canEdit(blockType.getId(), playerComponent.getGameMode().name(), "");
         if(!permission) return;
 
-        //Remove durability from the held item, pulled from vanilla hammer, doesn't work?
-        ItemStack heldItem = intCxt.getHeldItem();
-        if (heldItem != null && playerComponent.canDecreaseItemStackDurability(userRef, (ComponentAccessor)store) && !heldItem.isUnbreakable()) {
-            playerComponent.updateItemStackDurability(userRef, heldItem, playerComponent.getInventory().getHotbar(), intCxt.getHeldItemSlot(), -heldItem.getItem().getDurabilityLossOnHit(), (ComponentAccessor)cmdBuffer);
-        }
-
         StateData stData = blockType.getState();
         if (stData == null) return;
 

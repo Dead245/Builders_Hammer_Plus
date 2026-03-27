@@ -12,15 +12,21 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.VariantRotation;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.gameplay.GameplayConfig;
 import com.hypixel.hytale.server.core.asset.type.gameplay.WorldConfig;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -90,38 +96,31 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         if (targetBlockType == null) {
             return;
         }
+
+        //Calculate how to rotate the block
+        int rotation = world.getBlockRotationIndex(blockPos.x, blockPos.y, blockPos.z);
         
-        //VariantRotation varRot = targetBlockType.getVariantRotation();
-        //if(varRot.equals(VariantRotation.None)) {
-            //No rotation to be done, stuff like grass's texture will bug out if we rotate it like this
-            //return;
-        //}
-
-        //Remove durability from the held item, pulled from vanilla hammer, doesn't work?
-        ItemStack heldItem = intCxt.getHeldItem();
-        if (heldItem != null && playerComponent.canDecreaseItemStackDurability(ref, (ComponentAccessor)store) && !heldItem.isUnbreakable()) {
-            playerComponent.updateItemStackDurability(ref, heldItem, playerComponent.getInventory().getHotbar(), intCxt.getHeldItemSlot(), -heldItem.getItem().getDurabilityLossOnHit(), (ComponentAccessor)cmdBuffer);
-        }
-        //!!! Deprecated method getRotationIndex, marked for removal
-        int rotation = worldChunkComponent.getRotationIndex(blockPos.x, blockPos.y, blockPos.z);
+        Vector3i newRoot = blockPos;
         if (rotation < 4){
-            rotation = (rotation + 4); //Move rotation to a sideways position
+            rotation = (rotation + 4); //Normal -> Sideways
         } else if (rotation >= 4 && rotation < 8){
-            rotation = 8; //Move rotation to upside down position
+            rotation = 8; //Sideways -> Upside down
         }else{
-            rotation = 0; //Reset rotation to normal position
+            rotation = 0; //Upside Down -> Normal
         }
-        int blockID = BlockType.getAssetMap().getIndex(targetBlockType.getId());
-        //The function I need to set the block with new rotation
-        worldChunkComponent.setBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockID, targetBlockType, rotation, 0, 256);
-        state.state = InteractionState.Finished;
 
+        int blockID = BlockType.getAssetMap().getIndex(targetBlockType.getId());
+
+        //The function I need to set the block with new rotation
+        worldChunkComponent.setBlock(newRoot.getX(), newRoot.getY(), newRoot.getZ(), blockID, targetBlockType, rotation, 0, 256);
+        state.state = InteractionState.Finished;
+        
         //Add sound when editing the block, pulled from CycleBlockGroup interaction
         BlockSoundSet soundSet = BlockSoundSet.getAssetMap().getAsset(targetBlockType.getBlockSoundSetIndex());    
         if (soundSet != null) {
             int soundEventIndex = soundSet.getSoundEventIndices().getOrDefault(BlockSoundEvent.Hit, 0);
             if (soundEventIndex != 0) {
-                SoundUtil.playSoundEvent3d(ref, soundEventIndex, blockPos.x + 0.5D, blockPos.y + 0.5D, blockPos.z + 0.5D, (ComponentAccessor)cmdBuffer);
+                SoundUtil.playSoundEvent3d(ref, soundEventIndex, newRoot.x + 0.5D, newRoot.y + 0.5D, newRoot.z + 0.5D, (ComponentAccessor)cmdBuffer);
             }
         } 
     }
