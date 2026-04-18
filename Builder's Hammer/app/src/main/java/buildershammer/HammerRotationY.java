@@ -98,13 +98,9 @@ public class HammerRotationY extends SimpleBlockInteraction {
         //}
 
         int rotation = world.getBlockRotationIndex(blockPos.x, blockPos.y, blockPos.z);
-        if (rotation < 4){
-            rotation = (rotation + 1) % 4; //Cycle rotation 0-3
-        } else if (rotation >= 4 && rotation < 8){
-            rotation = ((rotation - 4 + 1) % 4) + 4; //Cycle rotation 4-7
-        } else {
-            rotation = 8; //Rotation is 8 (upside down), can't rotate this one
-        }
+        
+        rotation = RotationMap.nextRotation(rotation);
+
         int blockID = BlockType.getAssetMap().getIndex(targetBlockType.getId());
         //The function I need to set the block with new rotation
         worldChunkComponent.setBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockID, targetBlockType, rotation, 0, 256);

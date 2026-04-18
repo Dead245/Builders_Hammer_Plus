@@ -12,9 +12,7 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.BlockSoundEvent;
@@ -22,11 +20,8 @@ import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.gameplay.GameplayConfig;
 import com.hypixel.hytale.server.core.asset.type.gameplay.WorldConfig;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -56,7 +51,6 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         Ref<EntityStore> ref = intCxt.getEntity();
         Store<EntityStore> store = ref.getStore();
         Player playerComponent = cmdBuffer.getComponent(ref, Player.getComponentType());
-
         InteractionSyncData state = intCxt.getState();
         state.state = InteractionState.Failed;
         
@@ -101,13 +95,7 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         int rotation = world.getBlockRotationIndex(blockPos.x, blockPos.y, blockPos.z);
         
         Vector3i newRoot = blockPos;
-        if (rotation < 4){
-            rotation = (rotation + 4); //Normal -> Sideways
-        } else if (rotation >= 4 && rotation < 8){
-            rotation = 8; //Sideways -> Upside down
-        }else{
-            rotation = 0; //Upside Down -> Normal
-        }
+        rotation = RotationMap.nextFace(rotation);
 
         int blockID = BlockType.getAssetMap().getIndex(targetBlockType.getId());
 
