@@ -13,7 +13,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -35,6 +34,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.joml.Vector3i;
 
 public class HammerRotationXZ extends SimpleBlockInteraction {
     //Used as one part to register the interaction
@@ -100,7 +100,7 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         int blockID = BlockType.getAssetMap().getIndex(targetBlockType.getId());
 
         //The function I need to set the block with new rotation
-        worldChunkComponent.setBlock(newRoot.getX(), newRoot.getY(), newRoot.getZ(), blockID, targetBlockType, rotation, 0, 256);
+        worldChunkComponent.setBlock(newRoot.x, newRoot.y, newRoot.z, blockID, targetBlockType, rotation, 0, 256);
         state.state = InteractionState.Finished;
         
         //Add sound when editing the block, pulled from CycleBlockGroup interaction
