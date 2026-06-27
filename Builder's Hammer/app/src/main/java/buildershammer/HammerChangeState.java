@@ -52,7 +52,6 @@ public class HammerChangeState extends SimpleBlockInteraction {
         @Nonnull Vector3i blockPos, @Nonnull CooldownHandler cooldownHndlr) {
         //BuilderChangeState Interaction
         Ref<EntityStore> userRef = intCxt.getEntity();
-        Store<EntityStore> store = userRef.getStore();
         Player playerComponent = cmdBuffer.getComponent(userRef, Player.getComponentType());
 
         InteractionSyncData interactionState = intCxt.getState();

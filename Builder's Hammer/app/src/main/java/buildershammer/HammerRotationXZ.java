@@ -13,7 +13,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
@@ -49,7 +48,6 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         @Nonnull Vector3i blockPos, @Nonnull CooldownHandler cooldownHndlr) {
         //CustomRotationXZ interaction code here
         Ref<EntityStore> ref = intCxt.getEntity();
-        Store<EntityStore> store = ref.getStore();
         Player playerComponent = cmdBuffer.getComponent(ref, Player.getComponentType());
         InteractionSyncData state = intCxt.getState();
         state.state = InteractionState.Failed;

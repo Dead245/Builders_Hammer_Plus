@@ -4,11 +4,11 @@
     "Description": "server.items.BHP_Thorium_Builders_Hammer.description"
   },
   "Parent": "Tool_Hammer_Crude",
-  "Icon": "Icons/ItemsGenerated/Builders_Hammer.png",
+  "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumCycleIcon.png",
   "Quality": "Rare",
   "ItemLevel": 30,
   "Model": "Items/Tools/Hammer/Iron.blockymodel",
-  "Texture": "Resources/Tools/Hammer/ThoriumHammerTexture.png",
+  "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerCycleMode.png",
   "MaxStack": 1,
   "Recipe": {
     "TimeSeconds": 3.5,
@@ -39,28 +39,6 @@
   },
   "MaxDurability": 750,
   "UsePlayerAnimations": false,
-  "Interactions": {
-    "Primary": {
-      "Interactions": [
-        {
-          "Type": "Condition",
-          "Crouching": false,
-          "Next": "BuildersHammerCycleGroup",
-          "Failed": "BuildersHammerChangeState"
-        }
-      ]
-    },
-    "Secondary": {
-      "Interactions": [
-        {
-          "Type": "Condition",
-          "Crouching": false,
-          "Next": "BuildersHammerRotateY",
-          "Failed": "BuildersHammerRotateXZ"
-        }
-      ]
-    }
-  },
   "IconProperties": {
     "Scale": 0.45,
     "Rotation": [
@@ -70,7 +48,7 @@
     ],
     "Translation": [
       21,
-      -26
+      -28
     ]
   },
   "Light": {
@@ -79,5 +57,58 @@
   },
   "ItemEntity": {
     "ShowItemParticles": false
+  },
+  "State": {
+    "Rotate": {
+      "Parent": "Thorium_Builders_Hammer",
+      "TranslationProperties": {
+        "Name": "server.items.BHP_Thorium_Builders_Hammer.name",
+        "Description": "server.items.BHP_Thorium_Builders_Hammer.description",
+        "NameArguments": {
+          "State": "Rotate"
+        }
+      },
+      "Quality": "Rare",
+      "Variant": true,
+      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumRotateIcon.png",
+      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerRotateMode.png"
+    },
+    "Place": {
+      "Parent": "Thorium_Builders_Hammer",
+      "TranslationProperties": {
+        "Name": "server.items.BHP_Thorium_Builders_Hammer.name",
+        "Description": "server.items.BHP_Thorium_Builders_Hammer.description",
+        "NameArguments": {
+          "State": "Place"
+        }
+      },
+      "Quality": "Rare",
+      "Variant": true,
+      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumPlaceIcon.png",
+      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerPlaceMode.png"
+    },
+    "Cycle": "Thorium_Builders_Hammer",
+    "State": {
+      "Parent": "Thorium_Builders_Hammer",
+      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumStateIcon.png",
+      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerStateMode.png",
+      "Quality": "Rare",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "State"
+        }
+      }
+    },
+    "Replace": {
+      "Parent": "Thorium_Builders_Hammer",
+      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerReplaceMode.png",
+      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumReplaceIcon.png",
+      "Quality": "Rare",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "Replace"
+        }
+      }
+    }
   }
 }

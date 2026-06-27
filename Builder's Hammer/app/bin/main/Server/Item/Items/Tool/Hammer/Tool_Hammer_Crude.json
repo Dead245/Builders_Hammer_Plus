@@ -1,18 +1,21 @@
 {
   "TranslationProperties": {
     "Name": "server.items.BHP_Crude_Builders_Hammer.name",
-    "Description": "server.items.BHP_Crude_Builders_Hammer.description"
+    "Description": "server.items.BHP_Crude_Builders_Hammer.description",
+    "NameArguments": {
+      "State": "Cycle"
+    }
   },
   "Categories": [
-    "Items.Tools"
+    "Tool.BuilderTool"
   ],
-  "Icon": "Icons/ItemsGenerated/Tool_Hammer_Crude.png",
+  "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeCycleIcon.png",
   "Quality": "Common",
   "ItemLevel": 2,
   "MaxStack": 1,
   "Set": "Tool_Stone",
   "Model": "Items/Tools/Hammer/Crude.blockymodel",
-  "Texture": "Items/Tools/Hammer/Crude_Texture.png",
+  "Texture": "Items/Tools/CrudeHammer/CrudeHammerCycleMode.png",
   "PlayerAnimationsId": "Pickaxe",
   "Recipe": {
     "TimeSeconds": 1,
@@ -61,6 +64,27 @@
           "Failed": "BuildersHammerRotateXZ"
         }
       ]
+    },
+    "SwapTo": {
+      "RequireNewClick": false,
+      "Interactions": [
+        "HammerEquipAnimation"
+      ]
+    },
+    "Ability1": {
+      "Interactions": [
+        "HammerModeSwap"
+      ]
+    },
+    "Ability2": {
+      "Interactions": [
+        "HammerModeSwap"
+      ]
+    },
+    "Pick": {
+      "Interactions": [
+        "HammerEquipAnimation"
+      ]
     }
   },
   "MaxDurability": 100,
@@ -85,5 +109,70 @@
   "BlockSelectorTool": {
     "DurabilityLossOnUse": 1.0
   },
-  "ItemSoundSetId": "ISS_Weapons_Wood"
+  "ItemSoundSetId": "ISS_Weapons_Wood",
+  "State": {
+    "Rotate": {
+      "Parent": "Tool_Hammer_Crude",
+      "TranslationProperties": {
+        "Name": "server.items.BHP_Iron_Builders_Hammer.name",
+        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
+        "NameArguments": {
+          "State": "Rotate"
+        }
+      },
+      "Quality": "Common",
+      "Variant": true,
+      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeRotateIcon.png",
+      "Texture": "Items/Tools/CrudeHammer/CrudeHammerRotateMode.png"
+    },
+    "Place": {
+      "Parent": "Tool_Hammer_Crude",
+      "TranslationProperties": {
+        "Name": "server.items.BHP_Iron_Builders_Hammer.name",
+        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
+        "NameArguments": {
+          "State": "Place"
+        }
+      },
+      "Quality": "Common",
+      "Variant": true,
+      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudePlaceIcon.png",
+      "Texture": "Items/Tools/CrudeHammer/CrudeHammerPlaceMode.png"
+    },
+    "Cycle": "Tool_Hammer_Crude",
+    "State": {
+      "Parent": "Tool_Hammer_Crude",
+      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeStateIcon.png",
+      "Texture": "Items/Tools/CrudeHammer/CrudeHammerStateMode.png",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "State"
+        }
+      },
+      "Quality": "Common"
+    },
+    "Replace": {
+      "Parent": "Tool_Hammer_Crude",
+      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeReplaceIcon.png",
+      "Texture": "Items/Tools/CrudeHammer/CrudeHammerReplaceMode.png",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "Replace"
+        }
+      },
+      "Quality": "Common"
+    }
+  },
+  "SubCategory": "",
+  "BuilderTool": {
+    "Id": "Selection",
+    "IsBrush": false,
+    "Args": [
+      {
+        "Type": "Bool",
+        "Id": "KeepEmptyBlocks",
+        "Default": true
+      }
+    ]
+  }
 }

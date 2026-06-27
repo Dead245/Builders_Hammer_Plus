@@ -4,11 +4,11 @@
     "Description": "server.items.BHP_Iron_Builders_Hammer.description"
   },
   "Parent": "Tool_Hammer_Crude",
-  "Icon": "Icons/ItemsGenerated/Tool_Hammer_Iron.png",
+  "Icon": "Icons/ItemsGenerated/IronHammer/IronCycleIcon.png",
   "Quality": "Uncommon",
   "ItemLevel": 20,
   "Model": "Items/Tools/Hammer/Iron.blockymodel",
-  "Texture": "Items/Tools/Hammer/Iron_Texture.png",
+  "Texture": "Items/Tools/IronHammer/IronHammerCycleMode.png",
   "MaxStack": 1,
   "Recipe": {
     "TimeSeconds": 3.5,
@@ -40,5 +40,64 @@
   "Light": {
     "Radius": 1,
     "Color": "#ddd"
-  }
+  },
+  "State": {
+    "Rotate": {
+      "Parent": "Tool_Hammer_Iron",
+      "TranslationProperties": {
+        "Name": "server.items.BHP_Iron_Builders_Hammer.name",
+        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
+        "NameArguments": {
+          "State": "Rotate"
+        }
+      },
+      "Quality": "Uncommon",
+      "Variant": true,
+      "Icon": "Icons/ItemsGenerated/IronHammer/IronRotateIcon.png",
+      "Texture": "Items/Tools/IronHammer/IronHammerRotateMode.png"
+    },
+    "Place": {
+      "Parent": "Tool_Hammer_Iron",
+      "TranslationProperties": {
+        "Name": "server.items.BHP_Iron_Builders_Hammer.name",
+        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
+        "NameArguments": {
+          "State": "Place"
+        }
+      },
+      "Quality": "Uncommon",
+      "Variant": true,
+      "Icon": "Icons/ItemsGenerated/IronHammer/IronPlaceIcon.png",
+      "Texture": "Items/Tools/IronHammer/IronHammerPlaceMode.png"
+    },
+    "Cycle": "Tool_Hammer_Iron",
+    "State": {
+      "Parent": "Tool_Hammer_Iron",
+      "Icon": "Icons/ItemsGenerated/IronHammer/IronStateIcon.png",
+      "Texture": "Items/Tools/IronHammer/IronHammerStateMode.png",
+      "Quality": "Uncommon",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "State"
+        }
+      }
+    },
+    "Replace": {
+      "Parent": "Tool_Hammer_Iron",
+      "Icon": "Icons/ItemsGenerated/IronHammer/IronReplaceIcon.png",
+      "Texture": "Items/Tools/IronHammer/IronHammerReplaceMode.png",
+      "Quality": "Uncommon",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "Replace"
+        }
+      }
+    }
+  },
+  "HudUI": [
+    {
+      "Type": "Legend",
+      "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+    }
+  ]
 }

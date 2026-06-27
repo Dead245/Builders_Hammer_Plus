@@ -1,0 +1,10 @@
+{
+  "Type": "Simple",
+  "Effects": {
+    "ItemPlayerAnimationsId": "HammerAnimations",
+    "ItemAnimationId": "ModeSwap"
+  },
+  "Next": {
+    "Type": "BuilderModeChange"
+  }
+}

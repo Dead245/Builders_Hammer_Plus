@@ -25,6 +25,7 @@ public class BuildersHammer extends JavaPlugin{
         this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateY", HammerRotationY.class, HammerRotationY.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateXZ", HammerRotationXZ.class, HammerRotationXZ.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderChangeState", HammerChangeState.class, HammerChangeState.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderModeChange", HammerModeChange.class, HammerModeChange.CODEC);
     }
 
     public boolean canEdit(String blockID, String gamemode, String action){

@@ -19,7 +19,6 @@ import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.VariantRotation;
 import com.hypixel.hytale.server.core.asset.type.gameplay.GameplayConfig;
 import com.hypixel.hytale.server.core.asset.type.gameplay.WorldConfig;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -48,7 +47,6 @@ public class HammerRotationY extends SimpleBlockInteraction {
         @Nonnull Vector3i blockPos, @Nonnull CooldownHandler cooldownHndlr) {
         //CustomRotationY interaction code here
         Ref<EntityStore> ref = intCxt.getEntity();
-        Store<EntityStore> store = ref.getStore();
         Player playerComponent = cmdBuffer.getComponent(ref, Player.getComponentType());
 
         InteractionSyncData state = intCxt.getState();
@@ -90,12 +88,6 @@ public class HammerRotationY extends SimpleBlockInteraction {
         if (targetBlockType == null) {
             return;
         }
-
-        //VariantRotation varRot = targetBlockType.getVariantRotation();
-        //if(varRot.equals(VariantRotation.None)) {
-            //No rotation to be done, stuff like grass's texture will bug out if we rotate it
-            //return;
-        //}
 
         int rotation = world.getBlockRotationIndex(blockPos.x, blockPos.y, blockPos.z);
         

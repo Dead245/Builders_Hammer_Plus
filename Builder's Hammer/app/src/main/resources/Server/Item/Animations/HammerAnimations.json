@@ -1,0 +1,27 @@
+{
+  "Animations": {
+    "EquipHammer": {
+      "ThirdPerson": "Characters/Animations/HammerEquipSpin.blockyanim",
+      "BlendingDuration": 0,
+      "Speed": 0.75,
+      "FirstPerson": "Characters/Animations/HammerEquipSpinFPS.blockyanim"
+    },
+    "ModeSwap": {
+      "ThirdPerson": "Characters/Animations/HammerModeSwap.blockyanim",
+      "BlendingDuration": 0,
+      "FirstPerson": "Characters/Animations/HammerModeSwap.blockyanim"
+    }
+  },
+  "WiggleWeights": {
+    "Pitch": 2.5,
+    "PitchDeceleration": 0.1,
+    "Roll": 0.1,
+    "RollDeceleration": 1,
+    "X": 2.5,
+    "XDeceleration": 0.1,
+    "Y": 0.1,
+    "YDeceleration": 1,
+    "Z": 0,
+    "ZDeceleration": 0
+  }
+}
