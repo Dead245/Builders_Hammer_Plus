@@ -1,4 +1,4 @@
-package buildershammer;
+package buildershammer.Interactions;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -34,6 +34,9 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.joml.Vector3i;
+
+import buildershammer.BuildersHammer;
+import buildershammer.Helpers.RotationFunctions;
 
 public class HammerRotationXZ extends SimpleBlockInteraction {
     //Used as one part to register the interaction
@@ -89,11 +92,15 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
             return;
         }
 
-        //Calculate how to rotate the block
-        int rotation = world.getBlockRotationIndex(blockPos.x, blockPos.y, blockPos.z);
+        // TODO - Refactor to take into account the face the player clicks on, and rotate the block accordingly.
+        //TODO If hammer is in a certain mode, toggleable with E by default, swap between normal rotation or Axis Locked rotation.
         
+        //int rotation = RotationFunctions.rotateBlockOrientation(intType, world, blockPos);
+        int rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos);
+
+
+        //TODO - newRoot for future use - for changing the blockPos due to rotating larger objects. not implemented yet
         Vector3i newRoot = blockPos;
-        rotation = RotationMap.nextFace(rotation);
 
         int blockID = BlockType.getAssetMap().getIndex(targetBlockType.getId());
 

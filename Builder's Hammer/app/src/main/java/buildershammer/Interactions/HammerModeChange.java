@@ -1,4 +1,4 @@
-package buildershammer;
+package buildershammer.Interactions;
 
 import javax.annotation.Nonnull;
 
@@ -11,6 +11,9 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 
+import buildershammer.BuildersHammer;
+import buildershammer.Helpers.ModeList;
+
 // Interaction that cycles the hammer through a set of states, which represent different modes. The states are defined in ModeList.java. The default mode is "Cycle", which is just the item without a state.
 public class HammerModeChange extends SimpleInstantInteraction{
     //Used as one part to register the interaction
@@ -22,7 +25,6 @@ public class HammerModeChange extends SimpleInstantInteraction{
     protected void firstRun(@Nonnull InteractionType intType, @Nonnull InteractionContext intContext,
             @Nonnull CooldownHandler cooldownHndlr) {
         String heldItemId = intContext.getHeldItem().getItemId();
-        BuildersHammer.LOGGER.atInfo().log("HammerModeChange - Held item ID: %s", heldItemId);
         Item itemAsset = Item.getAssetMap().getAsset(heldItemId);
         if (itemAsset == null) {
             BuildersHammer.LOGGER.atInfo().log("HammerModeChange could not find item ID for: %s", heldItemId);
@@ -41,8 +43,8 @@ public class HammerModeChange extends SimpleInstantInteraction{
                 int nextIndex = (i + 1) % ModeList.modes.length;
                 
                 //withState() will throw an IllegalArgumentException if the item doesn't have that state
-                BuildersHammer.LOGGER.atInfo().log("HammerModeChange - Setting to mode: %s", ModeList.modes[nextIndex]);
                 ItemStack newItem = intContext.getHeldItem().withState(ModeList.modes[nextIndex]);
+                //TODO transfer things to the new item, like durability and certain metadata like the saved block info.
 
                 //Remove old item
                 intContext.getHeldItemContainer().removeItemStackFromSlot(intContext.getHeldItemSlot(),intContext.getHeldItem(),1);

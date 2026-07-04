@@ -6,6 +6,12 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 
+import buildershammer.Interactions.HammerChangeState;
+import buildershammer.Interactions.HammerModeChange;
+import buildershammer.Interactions.HammerModeSettings;
+import buildershammer.Interactions.HammerRotationXZ;
+import buildershammer.Interactions.HammerRotationY;
+
 public class BuildersHammer extends JavaPlugin{
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final Config<BuildersRootConfig> config;
@@ -22,12 +28,14 @@ public class BuildersHammer extends JavaPlugin{
     protected void setup() {
         this.config.save();
 
-        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateY", HammerRotationY.class, HammerRotationY.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateY", HammerRotationY.class, HammerRotationY.CODEC); // Should Delete Later
         this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateXZ", HammerRotationXZ.class, HammerRotationXZ.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderChangeState", HammerChangeState.class, HammerChangeState.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderModeChange", HammerModeChange.class, HammerModeChange.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderModeSettings", HammerModeSettings.class, HammerModeSettings.CODEC);
     }
-
+    
+    //TODO - Refactor to use new config setup once it is made
     public boolean canEdit(String blockID, String gamemode, String action){
         BuildersRootConfig rootConfig = config.get();
         if (gamemode.equals("Creative") && rootConfig.isCreativeBypassed()) return true;
