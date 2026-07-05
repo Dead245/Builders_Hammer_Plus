@@ -46,7 +46,7 @@ public class HammerModeChange extends SimpleInstantInteraction{
                 ItemStack newItem = intContext.getHeldItem().withState(ModeList.modes[nextIndex]);
                 //TODO transfer things to the new item, like durability and certain metadata like the saved block info.
 
-                //Remove old item
+                //Remove old item, is this needed before setting it to a new item?
                 intContext.getHeldItemContainer().removeItemStackFromSlot(intContext.getHeldItemSlot(),intContext.getHeldItem(),1);
                 //Add new item
                 intContext.getHeldItemContainer().setItemStackForSlot(intContext.getHeldItemSlot(),newItem);

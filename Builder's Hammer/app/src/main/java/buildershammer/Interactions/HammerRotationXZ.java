@@ -93,8 +93,8 @@ public class HammerRotationXZ extends SimpleBlockInteraction {
         }
 
         // TODO - Refactor to take into account the face the player clicks on, and rotate the block accordingly.
-        //TODO If hammer is in a certain mode, toggleable with E by default, swap between normal rotation or Axis Locked rotation.
-        
+        // TODO If hammer is in a certain mode, toggleable with E by default, swap between normal rotation or Axis Locked rotation.
+
         //int rotation = RotationFunctions.rotateBlockOrientation(intType, world, blockPos);
         int rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos);
 
