@@ -29,7 +29,7 @@ public class HammerModeSettings extends SimpleInstantInteraction {
         state.state = InteractionState.Failed;
 
         /*
-        Use InteractionVars to store the different settings. Can be edited via Asset Editor.
+        Uses InteractionVars to store the different settings for each mode. Can be edited via Asset Editor.
         Use key names like "Setting_1", "Setting_2", etc. within InteractionVars
         */
         

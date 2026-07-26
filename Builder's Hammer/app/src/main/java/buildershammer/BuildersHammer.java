@@ -6,11 +6,11 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 
+import buildershammer.Interactions.AOEBlockSelection;
 import buildershammer.Interactions.HammerChangeState;
 import buildershammer.Interactions.HammerModeChange;
 import buildershammer.Interactions.HammerModeSettings;
-import buildershammer.Interactions.HammerRotationXZ;
-import buildershammer.Interactions.HammerRotationY;
+import buildershammer.Interactions.HammerRotation;
 
 public class BuildersHammer extends JavaPlugin{
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -28,11 +28,12 @@ public class BuildersHammer extends JavaPlugin{
     protected void setup() {
         this.config.save();
 
-        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateY", HammerRotationY.class, HammerRotationY.CODEC); // Should Delete Later
-        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateXZ", HammerRotationXZ.class, HammerRotationXZ.CODEC);
+        // Interaction Initialization
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateBlock", HammerRotation.class, HammerRotation.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderChangeState", HammerChangeState.class, HammerChangeState.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderModeChange", HammerModeChange.class, HammerModeChange.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderModeSettings", HammerModeSettings.class, HammerModeSettings.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("AOEBlockSelect", AOEBlockSelection.class, AOEBlockSelection.CODEC);
     }
     
     //TODO - Refactor to use new config setup once it is made

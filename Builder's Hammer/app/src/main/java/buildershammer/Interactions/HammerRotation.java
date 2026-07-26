@@ -6,6 +6,8 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -33,34 +35,38 @@ import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.joml.Vector3i;
 
 import buildershammer.BuildersHammer;
 import buildershammer.Helpers.RotationFunctions;
 
-import org.joml.Vector3i;
+public class HammerRotation extends SimpleBlockInteraction {
 
-//TODO DELETE THIS FILE LATER - refactoring rotations
-public class HammerRotationY extends SimpleBlockInteraction {
     //Used as one part to register the interaction
-    public static final BuilderCodec<HammerRotationY> CODEC = BuilderCodec.builder(
-            HammerRotationY.class, HammerRotationY::new, SimpleBlockInteraction.CODEC
-    ).build();
+    public static final BuilderCodec<HammerRotation> CODEC = BuilderCodec.builder(
+            HammerRotation.class, HammerRotation::new, SimpleBlockInteraction.CODEC
+    ).append(new KeyedCodec<>("Face", BuilderCodec.STRING),
+                (config, value) -> config.face = value,
+                config -> config.face)
+    .add()
+    .build();
 
-    //Somewhat referenced/copied from CycleBlockGroupInteraction.json
+    // Adding custom data to the interaction
+    String face;
+
     @Override
     protected void interactWithBlock(@Nonnull World world, @Nonnull CommandBuffer<EntityStore> cmdBuffer,
         @Nonnull InteractionType intType, @Nonnull InteractionContext intCxt, @Nullable ItemStack itmStk,
         @Nonnull Vector3i blockPos, @Nonnull CooldownHandler cooldownHndlr) {
-        //CustomRotationY interaction code here
+        //CustomRotationXZ interaction code here
         Ref<EntityStore> ref = intCxt.getEntity();
         Player playerComponent = cmdBuffer.getComponent(ref, Player.getComponentType());
-
         InteractionSyncData state = intCxt.getState();
         state.state = InteractionState.Failed;
-
+        
         if (playerComponent == null) {
         (HytaleLogger.getLogger().at(Level.INFO)
-         .atMostEvery(5, TimeUnit.MINUTES)).log("CustomRotationY requires a Player but was used for: %s", ref);
+         .atMostEvery(5, TimeUnit.MINUTES)).log("CustomRotationXZ requires a Player but was used for: %s", ref);
          return;
         }
         
@@ -81,13 +87,13 @@ public class HammerRotationY extends SimpleBlockInteraction {
         GameplayConfig gameplayConfig = world.getGameplayConfig();
         WorldConfig worldConfig = gameplayConfig.getWorldConfig();
         
-        boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
-        if (!blockBreakingAllowed) return;
-        
         //Get config values
         BuildersHammer bHammer = BuildersHammer.getInstance();
         boolean permission = bHammer.canEdit(worldChunkComponent.getBlockType(blockPos).getId(), playerComponent.getGameMode().name(), "");
         if(!permission) return;
+
+        boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
+        if (!blockBreakingAllowed) return;
 
         int blockIndex = world.getBlock(blockPos);
         BlockType targetBlockType = BlockType.getAssetMap().getAsset(blockIndex);
@@ -95,20 +101,57 @@ public class HammerRotationY extends SimpleBlockInteraction {
             return;
         }
 
-        int rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos);
+        
+        // Get the setting from the item metadata, which determines how the block should be rotated.
+        Integer setting = intCxt.getHeldItem().getFromMetadataOrNull("Setting", Codec.INTEGER);
+
+        
+        // The face the player clicked on, which is stored on the interaction itself.
+        String clickedFace = this.face;
+
+        // Utilizing BlockCondition to trigger an interaciton based on what face the player clicks on.
+        int rotation;
+        switch (setting) {
+            case null:
+                // Default rotation
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
+                world.sendMessage(Message.raw("Setting is null"));
+                break;
+            case 1:
+                // Setting 1
+                face = "North"; // "Axis Lock"
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
+                world.sendMessage(Message.raw("Setting is 1"));
+                break;
+            case 2:
+                // Setting 2
+                face = "West"; // "2nd Axis Lock"
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
+                world.sendMessage(Message.raw("Setting is 2"));
+                break;
+            default:
+                // This should never happen, but if it does, default to normal rotation.
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
+                world.sendMessage(Message.raw("Setting defaulted"));
+                break;
+        }
+
+        //TODO - newRoot for future use - for changing the blockPos due to rotating larger objects. not implemented yet
+        // Also TODO - Figure out if the rotating block is larger than 1 block, and maybe utilize FillerBlockUtil in Update 6
+        Vector3i newRoot = blockPos;
 
         int blockID = BlockType.getAssetMap().getIndex(targetBlockType.getId());
 
         //The function I need to set the block with new rotation
-        worldChunkComponent.setBlock(blockPos.x, blockPos.y, blockPos.z, blockID, targetBlockType, rotation, 0, 256);
+        worldChunkComponent.setBlock(newRoot.x, newRoot.y, newRoot.z, blockID, targetBlockType, rotation, 0, 256);
         state.state = InteractionState.Finished;
-
+        
         //Add sound when editing the block, pulled from CycleBlockGroup interaction
         BlockSoundSet soundSet = BlockSoundSet.getAssetMap().getAsset(targetBlockType.getBlockSoundSetIndex());    
         if (soundSet != null) {
             int soundEventIndex = soundSet.getSoundEventIndices().getOrDefault(BlockSoundEvent.Hit, 0);
             if (soundEventIndex != 0) {
-                SoundUtil.playSoundEvent3d(ref, soundEventIndex, blockPos.x + 0.5D, blockPos.y + 0.5D, blockPos.z + 0.5D, (ComponentAccessor)cmdBuffer);
+                SoundUtil.playSoundEvent3d(ref, soundEventIndex, newRoot.x + 0.5D, newRoot.y + 0.5D, newRoot.z + 0.5D, (ComponentAccessor)cmdBuffer);
             }
         } 
     }
