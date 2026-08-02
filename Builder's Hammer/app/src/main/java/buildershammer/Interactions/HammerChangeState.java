@@ -20,7 +20,6 @@ import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.StateData;
@@ -58,7 +57,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
         Player playerComponent = cmdBuffer.getComponent(userRef, Player.getComponentType());
 
         InteractionSyncData interactionState = intCxt.getState();
-        interactionState.state = InteractionState.Failed;
+        interactionState.state = InteractionState.NotFinished;
 
         if (playerComponent == null) {
         (HytaleLogger.getLogger().at(Level.INFO)
@@ -71,12 +70,10 @@ public class HammerChangeState extends SimpleBlockInteraction {
           case InteractionType.Primary -> {
                 // Cycle Forwards
                 stateDirection = 1;
-                world.sendMessage(Message.raw("Primary Trigger"));
           }
           case InteractionType.Secondary -> {
                 // Cycle Backwards
                 stateDirection = -1;
-                world.sendMessage(Message.raw("Secondary Trigger"));
           }
           default -> {
                 // Cycle forwards if not Primary/Secondary
@@ -89,7 +86,10 @@ public class HammerChangeState extends SimpleBlockInteraction {
 
         long chunkIndex = ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z);
         Ref<ChunkStore> chunkReference = chkStore.getChunkReference(chunkIndex);
-        if (chunkReference == null || !chunkReference.isValid()) return;
+        if (chunkReference == null || !chunkReference.isValid()) {
+            interactionState.state = InteractionState.Failed;
+            return;
+        }
 
         WorldChunk worldChunkComponent = chkStoreStore.getComponent(chunkReference, WorldChunk.getComponentType());
         assert worldChunkComponent != null;
@@ -104,15 +104,24 @@ public class HammerChangeState extends SimpleBlockInteraction {
         WorldConfig worldConfig = gameplayConfig.getWorldConfig();
 
         boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
-        if (!blockBreakingAllowed) return;
+        if (!blockBreakingAllowed) {
+            interactionState.state = InteractionState.Failed;
+            return;
+        }
 
         //Get config values
         BuildersHammer bHammer = BuildersHammer.getInstance();
         boolean permission = bHammer.canEdit(blockType.getId(), playerComponent.getGameMode().name(), "");
-        if(!permission) return;
+        if(!permission) {
+            interactionState.state = InteractionState.Failed;
+            return;
+        }
 
         StateData stData = blockType.getState();
-        if (stData == null) return;
+        if (stData == null) {
+            interactionState.state = InteractionState.Failed;
+            return;
+        }
 
         //I guess this is the proper way to get the states?
         Map<String, Integer> packetData = stData.toPacket(blockType);
@@ -127,6 +136,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
         stateIndex = Math.floorMod(stateIndex + stateDirection, states.size());
 
         worldChunkComponent.setBlockInteractionState(blockPos, blockType, states.get(stateIndex));
+        interactionState.state = InteractionState.Finished;
 
         //Add sound when editing the block, pulled from CycleBlockGroup interaction
         BlockSoundSet soundSet = BlockSoundSet.getAssetMap().getAsset(blockType.getBlockSoundSetIndex());    

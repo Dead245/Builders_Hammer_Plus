@@ -1,0 +1,25 @@
+{
+  "Type": "Charging",
+  "Next": {
+    "0": {
+      "Type": "BuilderRotateBlock",
+      "Effects": {
+        "ItemAnimationId": "Mine"
+      }
+    },
+    "1.0": {
+      "Type": "AOEBlockSelect",
+      "Size": 2,
+      "UseLatestTarget": true,
+      "Filter Blocks": true,
+      "Interaction": {
+        "Interactions": [
+          {
+            "Type": "BuilderRotateBlock"
+          }
+        ]
+      },
+      "Effects": {}
+    }
+  }
+}

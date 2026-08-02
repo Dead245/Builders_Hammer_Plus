@@ -14,9 +14,6 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
-import com.hypixel.hytale.protocol.SimpleInteraction;
-import com.hypixel.hytale.protocol.BlockFace;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionChain;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -30,15 +27,14 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.operation.
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
-import buildershammer.Helpers.BlockFaceCheck;
 import buildershammer.Helpers.PositionHelpers;
 import it.unimi.dsi.fastutil.ints.Int2ObjectSortedMap;
 import it.unimi.dsi.fastutil.ints.IntSets;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 // Gets blocks in an AOE around the targetted block with a configurable size, and runs an interaction on each block.
-// Based on the vanilla RunOnBlockTypesInteraction.java
-// This interaction can be done in a SimpleInteraction instead
+// Based loosely on the vanilla RunOnBlockTypesInteraction.java
+// This interaction can honestly be done in a SimpleInteraction instead
 public class AOEBlockSelection extends SimpleBlockInteraction {
 
     //Used as one part to register the interaction
@@ -49,14 +45,10 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
         .documentation("The radius of the AOE in blocks.")
         .addValidator(Validators.greaterThan(Integer.valueOf(0)))
         .add()
-        .append(new KeyedCodec<>("Face", BuilderCodec.STRING),
-                (config, value) -> config.face = value,
-                config -> config.face)
-        .add()
         .append(new KeyedCodec<>("Delay", BuilderCodec.LONG),
                 (config, value) -> config.delay = value,
                 config -> config.delay)
-        .documentation("The delay in seconds between each AOE ring")
+        .documentation("[Not Implemented] The delay in seconds between each AOE ring.")
         .add()
         .append(new KeyedCodec<>("Interaction", RootInteraction.CHILD_ASSET_CODEC, true),
             (config, value) -> config.interaction = value,
@@ -73,7 +65,6 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
 
     // Adding custom data to the interaction (from above)
     protected int size = 1;
-    protected String face; // Utilize BlockCondition interaction before the AOE to find the face if needed. Passed to the child interactions.
     protected long delay;
     protected String interaction;
     protected boolean filterBlocks;
@@ -90,8 +81,6 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
     private static final MetaKey<Int2ObjectSortedMap<List<Vector3i>>> RINGS = META_REGISTRY.registerMetaObject();;
     private static final MetaKey<Integer> CURRENT_RING = META_REGISTRY.registerMetaObject();
 
-    //This is to pass to the child interactions
-    private static final MetaKey<BlockFace> BLOCK_FACE = META_REGISTRY.registerMetaObject();
 
     @Override
     protected void interactWithBlock(@Nonnull World world, @Nonnull CommandBuffer<EntityStore> cmdBuffer,
@@ -102,17 +91,14 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
         DynamicMetaStore<Interaction> instanceStore = intCxt.getInstanceStore();
         
         // Calculate the positions and potential rings of the AOE, then set to NotFinished
-        world.sendMessage(Message.raw(intCxt.getClientState().blockFace.name()));
 
         // TODO - implement different shapes for the positions
         List<Vector3i> positions;
         if (filterBlocks) {
             positions = PositionHelpers.generateCubePositions(blockPos, this.size, world,  IntSets.singleton(world.getBlock(blockPos)));
-            world.sendMessage(Message.raw("Positions:" + positions.size()));
 
         } else {
             positions = PositionHelpers.generateCubePositions(blockPos, this.size, world, null);
-            world.sendMessage(Message.raw("Positions:" + positions.size()));
         }
 
         // Get the rings to ripple
@@ -179,13 +165,13 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
         instanceStore.putMetaObject(ANY_SUCCEEDED,anySucceeded);
         
         if (!allFinished) {
-            // Not all of the current running ring of interactions are done, so return for now and try again
+            // Not all of the current running ring of interactions is done, so return for now and try again
             intCxt.getState().state =
             InteractionState.NotFinished;
             return;
         }
 
-         // Ring finished
+        // Ring finished
         var rings = instanceStore.getMetaObject(RINGS);
         int currentRing = instanceStore.getMetaObject(CURRENT_RING);
 
@@ -197,7 +183,7 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
             world = intCxt.getCommandBuffer().getExternalData().getWorld();
             initiateInteractions(world, intCxt, rings.get(currentRing));
 
-            intCxt.getState().state =InteractionState.NotFinished;
+            intCxt.getState().state = InteractionState.NotFinished;
             return;
         }
 
@@ -215,7 +201,9 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
 
     public void initiateInteractions(World world, InteractionContext intCxt, List<Vector3i> ring){
         var instanceStore = intCxt.getInstanceStore();
-        
+
+        if (ring == null) return;
+
         RootInteraction rootInteraction = RootInteraction.getAssetMap().getAsset(interaction);
         if(rootInteraction == null) return;
         
@@ -225,15 +213,10 @@ public class AOEBlockSelection extends SimpleBlockInteraction {
 
             InteractionContext forkedContext = intCxt.duplicate();
 
-            //intCxt.getState().blockFace = (this.face == null) ? com.hypixel.hytale.protocol.BlockFace.Down: BlockFaceCheck.getFace(this.face);
-
             BlockPosition target = new BlockPosition(pos.x,pos.y,pos.z);
             forkedContext.getMetaStore().putMetaObject(Interaction.TARGET_BLOCK_RAW,target);
 
             forkedContext.getMetaStore().putMetaObject(Interaction.TARGET_BLOCK, target);
-            
-            BlockFace faceDir = (this.face == null) ? BlockFace.Down : BlockFaceCheck.getFace(this.face);
-            forkedContext.getMetaStore().putMetaObject(BLOCK_FACE,faceDir);
 
             InteractionChain chain = intCxt.fork(forkedContext, rootInteraction, false);
             

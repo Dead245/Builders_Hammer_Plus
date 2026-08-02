@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -20,6 +19,7 @@ import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.protocol.BlockFace;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.gameplay.GameplayConfig;
@@ -45,14 +45,7 @@ public class HammerRotation extends SimpleBlockInteraction {
     //Used as one part to register the interaction
     public static final BuilderCodec<HammerRotation> CODEC = BuilderCodec.builder(
             HammerRotation.class, HammerRotation::new, SimpleBlockInteraction.CODEC
-    ).append(new KeyedCodec<>("Face", BuilderCodec.STRING),
-                (config, value) -> config.face = value,
-                config -> config.face)
-    .add()
-    .build();
-
-    // Adding custom data to the interaction
-    String face;
+    ).build();
 
     @Override
     protected void interactWithBlock(@Nonnull World world, @Nonnull CommandBuffer<EntityStore> cmdBuffer,
@@ -62,11 +55,13 @@ public class HammerRotation extends SimpleBlockInteraction {
         Ref<EntityStore> ref = intCxt.getEntity();
         Player playerComponent = cmdBuffer.getComponent(ref, Player.getComponentType());
         InteractionSyncData state = intCxt.getState();
-        state.state = InteractionState.Failed;
-        
+        state.state = InteractionState.NotFinished;
+
+        BlockFace face = intCxt.getClientState().blockFace;
+
         if (playerComponent == null) {
         (HytaleLogger.getLogger().at(Level.INFO)
-         .atMostEvery(5, TimeUnit.MINUTES)).log("CustomRotationXZ requires a Player but was used for: %s", ref);
+         .atMostEvery(5, TimeUnit.MINUTES)).log("HammerRotation requires a Player but was used for: %s", ref);
          return;
         }
         
@@ -105,34 +100,35 @@ public class HammerRotation extends SimpleBlockInteraction {
         // Get the setting from the item metadata, which determines how the block should be rotated.
         Integer setting = intCxt.getHeldItem().getFromMetadataOrNull("Setting", Codec.INTEGER);
 
-        
-        // The face the player clicked on, which is stored on the interaction itself.
-        String clickedFace = this.face;
-
-        // Utilizing BlockCondition to trigger an interaciton based on what face the player clicks on.
         int rotation;
         switch (setting) {
             case null:
                 // Default rotation
-                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
-                world.sendMessage(Message.raw("Setting is null"));
+                world.sendMessage(Message.raw("Default Rotation"));
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, face);
                 break;
             case 1:
                 // Setting 1
-                face = "North"; // "Axis Lock"
-                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
-                world.sendMessage(Message.raw("Setting is 1"));
+                face = BlockFace.North; // "Axis Lock"
+                world.sendMessage(Message.raw("North Axis Lock"));
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, face);
                 break;
             case 2:
                 // Setting 2
-                face = "West"; // "2nd Axis Lock"
-                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
-                world.sendMessage(Message.raw("Setting is 2"));
+                face = BlockFace.West; // "2nd Axis Lock"
+                world.sendMessage(Message.raw("West Axis Lock"));
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, face);
+                break;
+            case 3:
+                // Setting 3
+                face = BlockFace.Up; // "3rd Axis Lock"
+                world.sendMessage(Message.raw("Up Axis Lock"));
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, face);
                 break;
             default:
                 // This should never happen, but if it does, default to normal rotation.
-                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, clickedFace);
-                world.sendMessage(Message.raw("Setting defaulted"));
+                world.sendMessage(Message.raw("defaulting"));
+                rotation = RotationFunctions.rotateBlockFacing(intType, world, blockPos, face);
                 break;
         }
 

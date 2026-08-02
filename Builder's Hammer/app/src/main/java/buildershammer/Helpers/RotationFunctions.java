@@ -10,8 +10,8 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.Axis;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.protocol.BlockFace;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -25,26 +25,22 @@ public class RotationFunctions {
       }
 
       //Rotate Block Facing
-      public static int rotateBlockFacing(@Nonnull InteractionType intType, @Nonnull World world, @Nonnull Vector3i blockPos, String face) {
+      public static int rotateBlockFacing(@Nonnull InteractionType intType, @Nonnull World world, @Nonnull Vector3i blockPos, BlockFace face) {
             int stateDirection = 0;
             switch (intType) {
                   case InteractionType.Primary -> {
                         // Cycle Forwards
                         stateDirection = 1;
-                  world.sendMessage(Message.raw("Primary Trigger"));
                   }
                   case InteractionType.Secondary -> {
                         // Cycle Backwards
                         stateDirection = -1;
-                        world.sendMessage(Message.raw("Secondary Trigger"));
                   }
                   default -> {
                         // Cycle forwards if not Primary/Secondary
                         stateDirection = 1;
                   }
                   }
-
-            BlockFace faceDir = BlockFaceCheck.getFace(face);
         
             // Need all this to find the RotationTuple of the block
             WorldChunk targetChunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
@@ -64,8 +60,7 @@ public class RotationFunctions {
             if (blockSection == null) return -1;
 
             RotationTuple rotation = blockSection.getRotation(blockPos.x, blockPos.y, blockPos.z);
-
-            return nextRotation(rotation, stateDirection, faceDir);
+            return nextRotation(rotation, stateDirection, face);
       }
 
       public static int nextRotation(RotationTuple originalRotation, int direction, BlockFace face) {

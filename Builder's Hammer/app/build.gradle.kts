@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(files("libs/HytaleServer.jar"))
+    compileOnly(files(property("hytaleServerJar")))
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
 

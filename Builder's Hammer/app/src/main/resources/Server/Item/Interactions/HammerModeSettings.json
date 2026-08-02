@@ -1,0 +1,7 @@
+{
+  "Type": "BuilderModeSettings",
+  "Effects": {
+    "ItemPlayerAnimationsId": "HammerAnimations",
+    "ItemAnimationId": "ModeSwap"
+  }
+}

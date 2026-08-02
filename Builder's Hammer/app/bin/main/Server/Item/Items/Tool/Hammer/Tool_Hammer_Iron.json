@@ -54,7 +54,13 @@
       "Quality": "Uncommon",
       "Variant": true,
       "Icon": "Icons/ItemsGenerated/IronHammer/IronRotateIcon.png",
-      "Texture": "Items/Tools/IronHammer/IronHammerRotateMode.png"
+      "Texture": "Items/Tools/IronHammer/IronHammerRotateMode.png",
+      "HudUI": [
+        {
+          "Type": "Legend",
+          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+        }
+      ]
     },
     "Place": {
       "Parent": "Tool_Hammer_Iron",
@@ -68,7 +74,13 @@
       "Quality": "Uncommon",
       "Variant": true,
       "Icon": "Icons/ItemsGenerated/IronHammer/IronPlaceIcon.png",
-      "Texture": "Items/Tools/IronHammer/IronHammerPlaceMode.png"
+      "Texture": "Items/Tools/IronHammer/IronHammerPlaceMode.png",
+      "HudUI": [
+        {
+          "Type": "Legend",
+          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+        }
+      ]
     },
     "Cycle": "Tool_Hammer_Iron",
     "State": {
@@ -80,7 +92,13 @@
         "NameArguments": {
           "State": "State"
         }
-      }
+      },
+      "HudUI": [
+        {
+          "Type": "Legend",
+          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+        }
+      ]
     },
     "Replace": {
       "Parent": "Tool_Hammer_Iron",
@@ -91,7 +109,13 @@
         "NameArguments": {
           "State": "Replace"
         }
-      }
+      },
+      "HudUI": [
+        {
+          "Type": "Legend",
+          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+        }
+      ]
     }
   },
   "HudUI": [

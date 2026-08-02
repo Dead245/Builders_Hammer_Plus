@@ -1,0 +1,13 @@
+{
+  "Interactions": [
+    {
+      "Type": "BuilderRotateBlock",
+      "Face": "South"
+    }
+  ],
+  "Tags": {
+    "Attack": [
+      "Block"
+    ]
+  }
+}
