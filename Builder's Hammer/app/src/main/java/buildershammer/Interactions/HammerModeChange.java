@@ -57,7 +57,7 @@ public class HammerModeChange extends SimpleInstantInteraction{
             }
         }
         
-        BuildersHammer.LOGGER.atInfo().log("HammerModeChange could not find matching mode for held item ID: %s", heldItemId);
+        BuildersHammer.LOGGER.atWarning().log("HammerModeChange could not find matching mode for held item ID: %s", heldItemId);
         intContext.getState().state = InteractionState.Failed;
     }
 

@@ -2,23 +2,23 @@
   "Type": "Charging",
   "Next": {
     "0": {
-      "Type": "BuilderRotateBlock",
+      "Type": "BuilderChangeState",
       "Effects": {
         "ItemAnimationId": "Mine"
-      }
+      },
+      "UseLatestTarget": true
     },
     "1.0": {
       "Type": "AOEBlockSelect",
       "Size": 2,
-      "UseLatestTarget": true,
-      "Filter Blocks": true,
       "Interaction": {
         "Interactions": [
           {
-            "Type": "BuilderRotateBlock"
+            "Type": "BuilderChangeState"
           }
         ]
       },
+      "UseLatestTarget": true,
       "Effects": {
         "ItemAnimationId": "Mine"
       }
@@ -30,6 +30,6 @@
     "ClearAnimationOnFinish": true
   },
   "AllowIndefiniteHold": true,
-  "MouseSensitivityAdjustmentTarget": 0.3,
+  "MouseSensitivityAdjustmentTarget": 0.304,
   "DisplayProgress": true
 }

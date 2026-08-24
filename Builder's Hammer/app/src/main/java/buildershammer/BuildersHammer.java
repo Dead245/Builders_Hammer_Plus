@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.util.Config;
 
 import buildershammer.Interactions.AOEBlockSelection;
 import buildershammer.Interactions.HammerChangeState;
+import buildershammer.Interactions.HammerCycleBlock;
 import buildershammer.Interactions.HammerModeChange;
 import buildershammer.Interactions.HammerModeSettings;
 import buildershammer.Interactions.HammerRotation;
@@ -31,6 +32,7 @@ public class BuildersHammer extends JavaPlugin{
         // Interaction Initialization
         this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateBlock", HammerRotation.class, HammerRotation.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderChangeState", HammerChangeState.class, HammerChangeState.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderCycleBlock", HammerCycleBlock.class, HammerCycleBlock.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderModeChange", HammerModeChange.class, HammerModeChange.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderModeSettings", HammerModeSettings.class, HammerModeSettings.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("AOEBlockSelect", AOEBlockSelection.class, AOEBlockSelection.CODEC);

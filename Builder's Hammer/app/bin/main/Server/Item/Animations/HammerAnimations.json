@@ -10,6 +10,10 @@
       "ThirdPerson": "Characters/Animations/HammerModeSwap.blockyanim",
       "BlendingDuration": 0,
       "FirstPerson": "Characters/Animations/HammerModeSwap.blockyanim"
+    },
+    "Reelback": {
+      "ThirdPerson": "Characters/Animations/Reelback.blockyanim",
+      "FirstPerson": "Characters/Animations/Reelback.blockyanim"
     }
   },
   "WiggleWeights": {

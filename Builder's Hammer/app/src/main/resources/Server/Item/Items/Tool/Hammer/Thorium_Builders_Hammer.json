@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
     "Name": "server.items.BHP_Thorium_Builders_Hammer.name",
-    "Description": "server.items.BHP_Thorium_Builders_Hammer.description"
+    "Description": "server.items.BHP_CycleHammer.description"
   },
   "Parent": "Tool_Hammer_Crude",
   "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumCycleIcon.png",
@@ -55,15 +55,61 @@
     "Radius": 2,
     "Color": "#dfd"
   },
-  "ItemEntity": {
-    "ShowItemParticles": false
-  },
   "State": {
+    "Cycle": "Thorium_Builders_Hammer",
+    "State": {
+      "Parent": "Thorium_Builders_Hammer",
+      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumStateIcon.png",
+      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerStateMode.png",
+      "Quality": "Rare",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "State"
+        },
+        "Description": "server.items.BHP_StateHammer.description"
+      },
+      "HudUI": [
+        {
+          "Type": "Legend",
+          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+        }
+      ],
+      "Interactions": {
+        "Primary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "Secondary": {
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "SwapTo": {
+          "RequireNewClick": false,
+          "Interactions": [
+            "HammerEquipAnimation"
+          ]
+        },
+        "Ability1": {
+          "Interactions": [
+            "HammerModeSwap"
+          ]
+        },
+        "Ability2": {
+          "Interactions": [
+            "HammerModeSettings"
+          ]
+        }
+      },
+      "Variant": true
+    },
     "Rotate": {
       "Parent": "Thorium_Builders_Hammer",
       "TranslationProperties": {
         "Name": "server.items.BHP_Thorium_Builders_Hammer.name",
-        "Description": "server.items.BHP_Thorium_Builders_Hammer.description",
+        "Description": "server.items.BHP_RotateHammer.description",
         "NameArguments": {
           "State": "Rotate"
         }
@@ -77,7 +123,43 @@
           "Type": "Legend",
           "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
         }
-      ]
+      ],
+      "Interactions": {
+        "Primary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerRotation"
+          ]
+        },
+        "Secondary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerRotation"
+          ]
+        },
+        "Ability1": {
+          "Interactions": [
+            "HammerModeSwap"
+          ]
+        },
+        "Ability2": {
+          "Interactions": [
+            "HammerModeSettings"
+          ]
+        },
+        "SwapTo": {
+          "RequireNewClick": false,
+          "Interactions": [
+            "HammerEquipAnimation"
+          ]
+        }
+      },
+      "InteractionVars": {
+        "Setting_1-Z Axis Lock": {},
+        "Setting_2-X Axis Lock": {},
+        "Setting_3-Y Axis Lock": {},
+        "Setting_4-Force Rotate": {}
+      }
     },
     "Place": {
       "Parent": "Thorium_Builders_Hammer",
@@ -92,41 +174,6 @@
       "Variant": true,
       "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumPlaceIcon.png",
       "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerPlaceMode.png",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ]
-    },
-    "Cycle": "Thorium_Builders_Hammer",
-    "State": {
-      "Parent": "Thorium_Builders_Hammer",
-      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumStateIcon.png",
-      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerStateMode.png",
-      "Quality": "Rare",
-      "TranslationProperties": {
-        "NameArguments": {
-          "State": "State"
-        }
-      },
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ]
-    },
-    "Replace": {
-      "Parent": "Thorium_Builders_Hammer",
-      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerReplaceMode.png",
-      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumReplaceIcon.png",
-      "Quality": "Rare",
-      "TranslationProperties": {
-        "NameArguments": {
-          "State": "Replace"
-        }
-      },
       "HudUI": [
         {
           "Type": "Legend",

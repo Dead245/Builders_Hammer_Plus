@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.hypixel.hytale.builtin.buildertools.utils.FillerPlacementUtil;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -20,6 +21,7 @@ import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.StateData;
@@ -33,9 +35,12 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.cli
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+
 import org.joml.Vector3i;
 
 
@@ -63,7 +68,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
         (HytaleLogger.getLogger().at(Level.INFO)
          .atMostEvery(5, TimeUnit.MINUTES)).log("HammerChangeState requires a Player but was used for: %s", userRef);
          return;
-        }
+        } // Maybe remove this requirement
 
         int stateDirection = 0;
         switch (intType) {
@@ -96,9 +101,10 @@ public class HammerChangeState extends SimpleBlockInteraction {
         
         BlockChunk blockChunkComponent = chkStoreStore.getComponent(chunkReference, BlockChunk.getComponentType());
         assert blockChunkComponent != null;
-        
-        BlockType blockType = worldChunkComponent.getBlockType(blockPos);
 
+        // TODO - getBlockType() is deprecated, need replacement
+        BlockType blockType = worldChunkComponent.getBlockType(blockPos);
+        
         //Make sure player can change/edit blocks first
         GameplayConfig gameplayConfig = world.getGameplayConfig();
         WorldConfig worldConfig = gameplayConfig.getWorldConfig();
@@ -108,7 +114,7 @@ public class HammerChangeState extends SimpleBlockInteraction {
             interactionState.state = InteractionState.Failed;
             return;
         }
-
+        
         //Get config values
         BuildersHammer bHammer = BuildersHammer.getInstance();
         boolean permission = bHammer.canEdit(blockType.getId(), playerComponent.getGameMode().name(), "");
@@ -135,7 +141,12 @@ public class HammerChangeState extends SimpleBlockInteraction {
 
         stateIndex = Math.floorMod(stateIndex + stateDirection, states.size());
 
-        worldChunkComponent.setBlockInteractionState(blockPos, blockType, states.get(stateIndex));
+        Ref<ChunkStore> sectionReference = chkStore.getChunkSectionReferenceAtBlock(blockPos.x, blockPos.y, blockPos.z);
+        if (sectionReference == null) {
+            interactionState.state = InteractionState.Failed;
+            return;
+        }
+        BlockOperations.setBlockInteractionState(chkStore, sectionReference, blockPos.x, blockPos.y, blockPos.z, blockType, states.get(stateIndex), permission);
         interactionState.state = InteractionState.Finished;
 
         //Add sound when editing the block, pulled from CycleBlockGroup interaction

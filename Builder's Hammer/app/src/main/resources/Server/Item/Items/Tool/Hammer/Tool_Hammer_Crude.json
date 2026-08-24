@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
     "Name": "server.items.BHP_Crude_Builders_Hammer.name",
-    "Description": "server.items.BHP_Crude_Builders_Hammer.description",
+    "Description": "server.items.BHP_CycleHammer.description",
     "NameArguments": {
       "State": "Cycle"
     }
@@ -47,20 +47,14 @@
   "Interactions": {
     "Primary": {
       "Interactions": [
-        {
-          "Type": "Condition",
-          "Crouching": false,
-          "Next": "BuildersHammerCycleGroup",
-          "Failed": "BuildersHammerChangeState"
-        }
-      ]
+        "HammerCycle"
+      ],
+      "HudInputBindingEntry": "Rotate Clockwise",
+      "RequireNewClick": true
     },
     "Secondary": {
       "Interactions": [
-        {
-          "Type": "Condition",
-          "Crouching": false
-        }
+        "HammerCycle"
       ]
     },
     "SwapTo": {
@@ -77,11 +71,6 @@
     "Ability2": {
       "Interactions": [
         "HammerModeSettings"
-      ]
-    },
-    "Pick": {
-      "Interactions": [
-        "HammerEquipAnimation"
       ]
     }
   },
@@ -109,11 +98,60 @@
   },
   "ItemSoundSetId": "ISS_Weapons_Wood",
   "State": {
+    "Cycle": "Tool_Hammer_Crude",
+    "State": {
+      "Parent": "Tool_Hammer_Crude",
+      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeStateIcon.png",
+      "Texture": "Items/Tools/CrudeHammer/CrudeHammerStateMode.png",
+      "TranslationProperties": {
+        "Description": "server.items.BHP_StateHammer.description",
+        "NameArguments": {
+          "State": "State"
+        }
+      },
+      "Quality": "Common",
+      "HudUI": [
+        {
+          "Type": "Legend",
+          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+        }
+      ],
+      "Interactions": {
+        "Primary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "Secondary": {
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "SwapTo": {
+          "RequireNewClick": false,
+          "Interactions": [
+            "HammerEquipAnimation"
+          ]
+        },
+        "Ability1": {
+          "Interactions": [
+            "HammerModeSwap"
+          ]
+        },
+        "Ability2": {
+          "Interactions": [
+            "HammerModeSettings"
+          ]
+        }
+      },
+      "Variant": true
+    },
     "Rotate": {
       "Parent": "Tool_Hammer_Crude",
       "TranslationProperties": {
         "Name": "server.items.BHP_Iron_Builders_Hammer.name",
-        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
+        "Description": "server.items.BHP_RotateHammer.description",
         "NameArguments": {
           "State": "Rotate"
         }
@@ -141,12 +179,6 @@
             "HammerRotation"
           ]
         },
-        "SwapTo": {
-          "RequireNewClick": false,
-          "Interactions": [
-            "HammerEquipAnimation"
-          ]
-        },
         "Ability1": {
           "Interactions": [
             "HammerModeSwap"
@@ -157,28 +189,18 @@
             "HammerModeSettings"
           ]
         },
-        "Pick": {
+        "SwapTo": {
+          "RequireNewClick": false,
           "Interactions": [
             "HammerEquipAnimation"
           ]
         }
       },
       "InteractionVars": {
-        "Setting_1": {
-          "Tags": {
-            "State_Setting1_Name": []
-          }
-        },
-        "Setting_2": {
-          "Tags": {
-            "State_Setting2_Name": []
-          }
-        },
-        "Setting_3": {
-          "Tags": {
-            "State_Setting3_Name": []
-          }
-        }
+        "Setting_1-Z Axis Lock": {},
+        "Setting_2-X Axis Lock": {},
+        "Setting_3-Y Axis Lock": {},
+        "Setting_4-Force Rotate": {}
       }
     },
     "Place": {
@@ -194,121 +216,6 @@
       "Variant": true,
       "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudePlaceIcon.png",
       "Texture": "Items/Tools/CrudeHammer/CrudeHammerPlaceMode.png",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ]
-    },
-    "Cycle": "Tool_Hammer_Crude",
-    "State": {
-      "Parent": "Tool_Hammer_Crude",
-      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeStateIcon.png",
-      "Texture": "Items/Tools/CrudeHammer/CrudeHammerStateMode.png",
-      "TranslationProperties": {
-        "NameArguments": {
-          "State": "State"
-        }
-      },
-      "Quality": "Common",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ],
-      "Interactions": {
-        "Primary": {
-          "RequireNewClick": true,
-          "Interactions": [
-            {
-              "Type": "Charging",
-              "AllowIndefiniteHold": true,
-              "DisplayProgress": true,
-              "Next": {
-                "0": {
-                  "Type": "BuilderChangeState",
-                  "Effects": {
-                    "ItemAnimationId": "Mine"
-                  },
-                  "UseLatestTarget": true
-                },
-                "1.0": {
-                  "Type": "AOEBlockSelect",
-                  "Size": 1,
-                  "Interaction": {
-                    "Interactions": [
-                      {
-                        "Type": "BuilderChangeState"
-                      }
-                    ]
-                  },
-                  "UseLatestTarget": true
-                }
-              }
-            }
-          ]
-        },
-        "Secondary": {
-          "Interactions": [
-            {
-              "Type": "Charging",
-              "AllowIndefiniteHold": true,
-              "DisplayProgress": true,
-              "Next": {
-                "0": {
-                  "Type": "BuilderChangeState",
-                  "Effects": {
-                    "ItemAnimationId": "Mine"
-                  },
-                  "UseLatestTarget": true
-                },
-                "1.0": {
-                  "Type": "AOEBlockSelect",
-                  "Size": 1,
-                  "Interaction": {
-                    "Interactions": [
-                      {
-                        "Type": "BuilderChangeState"
-                      }
-                    ]
-                  },
-                  "UseLatestTarget": true
-                }
-              }
-            }
-          ]
-        },
-        "SwapTo": {
-          "RequireNewClick": false,
-          "Interactions": [
-            "HammerEquipAnimation"
-          ]
-        },
-        "Ability1": {
-          "Interactions": [
-            "HammerModeSwap"
-          ]
-        },
-        "Ability2": {
-          "Interactions": [
-            "HammerModeSettings"
-          ]
-        },
-        "Pick": {}
-      }
-    },
-    "Replace": {
-      "Parent": "Tool_Hammer_Crude",
-      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeReplaceIcon.png",
-      "Texture": "Items/Tools/CrudeHammer/CrudeHammerReplaceMode.png",
-      "TranslationProperties": {
-        "NameArguments": {
-          "State": "Replace"
-        }
-      },
-      "Quality": "Common",
       "HudUI": [
         {
           "Type": "Legend",

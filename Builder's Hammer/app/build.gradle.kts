@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(files(property("hytaleServerJar")))
+    compileOnly(files(property("hytalePrereleaseServerJar")))
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
 
@@ -47,5 +47,5 @@ tasks.named<Test>("test") {
 //change name and version here
 tasks.jar {
     archiveBaseName.set("BuildersHammerPlus")
-    archiveVersion.set("1.5.0")
+    archiveVersion.set("2.0.0")
 }

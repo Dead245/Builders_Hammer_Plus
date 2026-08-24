@@ -6,7 +6,7 @@ public class ModeList {
         "Cycle",
         "Rotate",
         "State",
-        "Place",
-        "Replace"
+        //"Place", //Prob will combine place/replace in the future
+        //"Replace"
     };
 }

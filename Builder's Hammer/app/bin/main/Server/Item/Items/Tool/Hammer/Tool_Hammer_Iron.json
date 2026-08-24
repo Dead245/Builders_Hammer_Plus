@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
     "Name": "server.items.BHP_Iron_Builders_Hammer.name",
-    "Description": "server.items.BHP_Iron_Builders_Hammer.description"
+    "Description": "server.items.BHP_CycleHammer.description"
   },
   "Parent": "Tool_Hammer_Crude",
   "Icon": "Icons/ItemsGenerated/IronHammer/IronCycleIcon.png",
@@ -42,11 +42,60 @@
     "Color": "#ddd"
   },
   "State": {
+    "Cycle": "Tool_Hammer_Iron",
+    "State": {
+      "Parent": "Tool_Hammer_Iron",
+      "Icon": "Icons/ItemsGenerated/IronHammer/IronStateIcon.png",
+      "Texture": "Items/Tools/IronHammer/IronHammerStateMode.png",
+      "Quality": "Uncommon",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "State"
+        },
+        "Description": "server.items.BHP_StateHammer.description"
+      },
+      "HudUI": [
+        {
+          "Type": "Legend",
+          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
+        }
+      ],
+      "Interactions": {
+        "Primary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "Secondary": {
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "SwapTo": {
+          "RequireNewClick": false,
+          "Interactions": [
+            "HammerEquipAnimation"
+          ]
+        },
+        "Ability1": {
+          "Interactions": [
+            "HammerModeSwap"
+          ]
+        },
+        "Ability2": {
+          "Interactions": [
+            "HammerModeSettings"
+          ]
+        }
+      },
+      "Variant": true
+    },
     "Rotate": {
       "Parent": "Tool_Hammer_Iron",
       "TranslationProperties": {
         "Name": "server.items.BHP_Iron_Builders_Hammer.name",
-        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
+        "Description": "server.items.BHP_RotateHammer.description",
         "NameArguments": {
           "State": "Rotate"
         }
@@ -60,7 +109,43 @@
           "Type": "Legend",
           "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
         }
-      ]
+      ],
+      "Interactions": {
+        "Primary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerRotation"
+          ]
+        },
+        "Secondary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerRotation"
+          ]
+        },
+        "Ability1": {
+          "Interactions": [
+            "HammerModeSwap"
+          ]
+        },
+        "Ability2": {
+          "Interactions": [
+            "HammerModeSettings"
+          ]
+        },
+        "SwapTo": {
+          "RequireNewClick": false,
+          "Interactions": [
+            "HammerEquipAnimation"
+          ]
+        }
+      },
+      "InteractionVars": {
+        "Setting_1-Z Axis Lock": {},
+        "Setting_2-X Axis Lock": {},
+        "Setting_3-Y Axis Lock": {},
+        "Setting_4-Force Rotate": {}
+      }
     },
     "Place": {
       "Parent": "Tool_Hammer_Iron",
@@ -75,41 +160,6 @@
       "Variant": true,
       "Icon": "Icons/ItemsGenerated/IronHammer/IronPlaceIcon.png",
       "Texture": "Items/Tools/IronHammer/IronHammerPlaceMode.png",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ]
-    },
-    "Cycle": "Tool_Hammer_Iron",
-    "State": {
-      "Parent": "Tool_Hammer_Iron",
-      "Icon": "Icons/ItemsGenerated/IronHammer/IronStateIcon.png",
-      "Texture": "Items/Tools/IronHammer/IronHammerStateMode.png",
-      "Quality": "Uncommon",
-      "TranslationProperties": {
-        "NameArguments": {
-          "State": "State"
-        }
-      },
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ]
-    },
-    "Replace": {
-      "Parent": "Tool_Hammer_Iron",
-      "Icon": "Icons/ItemsGenerated/IronHammer/IronReplaceIcon.png",
-      "Texture": "Items/Tools/IronHammer/IronHammerReplaceMode.png",
-      "Quality": "Uncommon",
-      "TranslationProperties": {
-        "NameArguments": {
-          "State": "Replace"
-        }
-      },
       "HudUI": [
         {
           "Type": "Legend",

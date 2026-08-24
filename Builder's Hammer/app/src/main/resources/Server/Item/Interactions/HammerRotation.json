@@ -19,7 +19,17 @@
           }
         ]
       },
-      "Effects": {}
+      "Effects": {
+        "ItemAnimationId": "Mine"
+      }
     }
-  }
+  },
+  "Effects": {
+    "ItemPlayerAnimationsId": "HammerAnimations",
+    "ItemAnimationId": "Reelback",
+    "ClearAnimationOnFinish": true
+  },
+  "AllowIndefiniteHold": true,
+  "MouseSensitivityAdjustmentTarget": 0.3,
+  "DisplayProgress": true
 }
