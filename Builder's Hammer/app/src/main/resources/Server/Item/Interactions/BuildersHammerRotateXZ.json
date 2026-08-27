@@ -1,7 +1,0 @@
-{
-  "Type": "BuilderRotateXZ",
-  "RunTime": 0.1,
-  "Effects": {
-            "ItemAnimationId": "Mine"
-          }
-}

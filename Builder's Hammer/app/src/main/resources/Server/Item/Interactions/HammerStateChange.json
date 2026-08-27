@@ -1,0 +1,54 @@
+{
+  "Type": "Charging",
+  "Next": {
+    "0": {
+      "Type": "BuilderChangeState",
+      "Effects": {
+        "ItemAnimationId": "Mine"
+      },
+      "UseLatestTarget": true,
+      "Failed": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Set_Mask"
+        }
+      },
+      "Next": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Add_Mask"
+        }
+      }
+    },
+    "1.0": {
+      "Type": "AOEBlockSelect",
+      "Size": 2,
+      "Interaction": {
+        "Interactions": [
+          {
+            "Type": "BuilderChangeState"
+          }
+        ]
+      },
+      "UseLatestTarget": true,
+      "Effects": {
+        "ItemAnimationId": "Mine"
+      },
+      "Filter Blocks": true,
+      "Failed": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Set_Mask"
+        }
+      }
+    }
+  },
+  "Effects": {
+    "ItemPlayerAnimationsId": "HammerAnimations",
+    "ItemAnimationId": "Reelback",
+    "ClearAnimationOnFinish": true
+  },
+  "AllowIndefiniteHold": true,
+  "MouseSensitivityAdjustmentTarget": 0.304,
+  "DisplayProgress": true
+}

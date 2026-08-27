@@ -1,0 +1,8 @@
+{
+  "Type": "BuilderModeSettings",
+  "Effects": {
+    "ItemPlayerAnimationsId": "HammerAnimations",
+    "ItemAnimationId": "ModeSwap",
+    "LocalSoundEventId": "SFX_Cloth_Walk"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "Type": "Charging",
+  "Effects": {
+    "ItemPlayerAnimationsId": "HammerAnimations",
+    "ItemAnimationId": "Reelback",
+    "ClearAnimationOnFinish": true
+  },
+  "AllowIndefiniteHold": true,
+  "DisplayProgress": true,
+  "MouseSensitivityAdjustmentTarget": 0.3,
+  "Next": {
+    "0": {
+      "Type": "BuilderCycleBlock",
+      "Effects": {
+        "ItemAnimationId": "Mine"
+      },
+      "UseLatestTarget": false,
+      "Failed": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Set_Mask"
+        }
+      },
+      "Next": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Add_Mask"
+        }
+      }
+    },
+    "1.0": {
+      "Type": "AOEBlockSelect",
+      "Size": 2,
+      "UseLatestTarget": true,
+      "Filter Blocks": true,
+      "Interaction": {
+        "Interactions": [
+          {
+            "Type": "BuilderCycleBlock",
+            "Effects": {
+              "ItemAnimationId": "Mine"
+            }
+          }
+        ],
+        "RequireNewClick": true
+      },
+      "Effects": {
+        "ItemAnimationId": "Mine"
+      },
+      "Failed": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Set_Mask"
+        }
+      },
+      "Next": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Add_Mask"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "Type": "Simple",
+  "Effects": {
+    "ItemPlayerAnimationsId": "HammerAnimations",
+    "ItemAnimationId": "ModeSwap",
+    "LocalSoundEventId": "SFX_Bone_Walk"
+  },
+  "Next": {
+    "Type": "BuilderModeChange"
+  }
+}

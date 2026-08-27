@@ -6,6 +6,13 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 
+import buildershammer.Interactions.AOEBlockSelection;
+import buildershammer.Interactions.HammerChangeState;
+import buildershammer.Interactions.HammerCycleBlock;
+import buildershammer.Interactions.HammerModeChange;
+import buildershammer.Interactions.HammerModeSettings;
+import buildershammer.Interactions.HammerRotation;
+
 public class BuildersHammer extends JavaPlugin{
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final Config<BuildersRootConfig> config;
@@ -15,26 +22,35 @@ public class BuildersHammer extends JavaPlugin{
         super(init);
         instance = this;
         LOGGER.atInfo().log("Plugin %s version %s initialized.", this.getName(),this.getManifest().getVersion().toString());
-        this.config = this.withConfig("BuildersHammerConfig", BuildersRootConfig.CODEC);
+        this.config = this.withConfig("BuildersHammerPlusConfig", BuildersRootConfig.CODEC);
+        
     }
 
     @Override
     protected void setup() {
         this.config.save();
-
-        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateY", HammerRotationY.class, HammerRotationY.CODEC);
-        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateXZ", HammerRotationXZ.class, HammerRotationXZ.CODEC);
+        
+        // Interaction Initialization
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateBlock", HammerRotation.class, HammerRotation.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderChangeState", HammerChangeState.class, HammerChangeState.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderCycleBlock", HammerCycleBlock.class, HammerCycleBlock.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderModeChange", HammerModeChange.class, HammerModeChange.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("BuilderModeSettings", HammerModeSettings.class, HammerModeSettings.CODEC);
+        this.getCodecRegistry(Interaction.CODEC).register("AOEBlockSelect", AOEBlockSelection.class, AOEBlockSelection.CODEC);
     }
 
-    public boolean canEdit(String blockID, String gamemode, String action){
+
+    public boolean canEdit(String blockID, String gamemode, String mode){
         BuildersRootConfig rootConfig = config.get();
-        if (gamemode.equals("Creative") && rootConfig.isCreativeBypassed()) return true;
+        rootConfig.buildCache();
+        
+        if (gamemode.equals("Creative") && rootConfig.isCreativeBypassed(mode)) return true;
+        
 
         if (blockID.startsWith("*")) blockID = blockID.substring(1);
         
         blockID = blockID.trim();
-        for (String id : rootConfig.getGlobalRestrictedBlocks()) {
+        for (String id : rootConfig.getRestrictedBlocks(mode)) {
             String regex = id.trim().replace("*", ".*");
 
             if (blockID.matches(regex)) {

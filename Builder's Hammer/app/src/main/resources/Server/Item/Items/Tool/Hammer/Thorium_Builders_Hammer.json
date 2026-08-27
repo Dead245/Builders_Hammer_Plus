@@ -1,0 +1,149 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.BHP_Thorium_Builders_Hammer.name",
+    "Description": "server.items.BHP_CycleHammer.description"
+  },
+  "Parent": "Tool_Hammer_Crude",
+  "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumCycleIcon.png",
+  "Quality": "Rare",
+  "ItemLevel": 30,
+  "Model": "Items/Tools/Hammer/Iron.blockymodel",
+  "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerCycleMode.png",
+  "MaxStack": 1,
+  "Recipe": {
+    "TimeSeconds": 3.5,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bar_Thorium",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Ingredient_Leather_Medium",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Fabric_Scrap_Linen",
+        "Quantity": 3
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Workbench",
+        "Type": "Crafting",
+        "Categories": [
+          "Workbench_Tools"
+        ],
+        "RequiredTierLevel": 2
+      }
+    ]
+  },
+  "MaxDurability": 750,
+  "UsePlayerAnimations": false,
+  "IconProperties": {
+    "Scale": 0.45,
+    "Rotation": [
+      317,
+      114,
+      0
+    ],
+    "Translation": [
+      21,
+      -28
+    ]
+  },
+  "State": {
+    "Cycle": "Thorium_Builders_Hammer",
+    "State": {
+      "Parent": "Thorium_Builders_Hammer",
+      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumStateIcon.png",
+      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerStateMode.png",
+      "Quality": "Rare",
+      "TranslationProperties": {
+        "NameArguments": {
+          "State": "State"
+        },
+        "Description": "server.items.BHP_StateHammer.description"
+      },
+      "Interactions": {
+        "Primary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "Secondary": {
+          "Interactions": [
+            "HammerStateChange"
+          ]
+        },
+        "SwapTo": {
+          "RequireNewClick": false,
+          "Interactions": [
+            "HammerEquipAnimation"
+          ]
+        },
+        "Ability1": {
+          "Interactions": [
+            "HammerModeSwap"
+          ]
+        },
+        "Ability2": {
+          "Interactions": [
+            "HammerModeSettings"
+          ]
+        }
+      },
+      "Variant": true
+    },
+    "Rotate": {
+      "Parent": "Thorium_Builders_Hammer",
+      "TranslationProperties": {
+        "Name": "server.items.BHP_Thorium_Builders_Hammer.name",
+        "Description": "server.items.BHP_RotateHammer.description",
+        "NameArguments": {
+          "State": "Rotate"
+        }
+      },
+      "Quality": "Rare",
+      "Variant": true,
+      "Icon": "Icons/ItemsGenerated/ThoriumHammer/ThoriumRotateIcon.png",
+      "Texture": "Items/Tools/ThoriumHammer/ThoriumHammerRotateMode.png",
+      "Interactions": {
+        "Primary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerRotation"
+          ]
+        },
+        "Secondary": {
+          "RequireNewClick": true,
+          "Interactions": [
+            "HammerRotation"
+          ]
+        },
+        "Ability1": {
+          "Interactions": [
+            "HammerModeSwap"
+          ]
+        },
+        "Ability2": {
+          "Interactions": [
+            "HammerModeSettings"
+          ]
+        },
+        "SwapTo": {
+          "RequireNewClick": false,
+          "Interactions": [
+            "HammerEquipAnimation"
+          ]
+        }
+      },
+      "InteractionVars": {
+        "Setting_1-Z Axis Lock": {},
+        "Setting_2-X Axis Lock": {},
+        "Setting_3-Y Axis Lock": {},
+        "Setting_4-Force Rotate": {}
+      }
+    }
+  }
+}
