@@ -19,24 +19,19 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.Axis;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
-import com.hypixel.hytale.protocol.Rotation;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.protocol.BlockFace;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.gameplay.GameplayConfig;
 import com.hypixel.hytale.server.core.asset.type.gameplay.WorldConfig;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
@@ -116,8 +111,11 @@ public class HammerRotation extends SimpleBlockInteraction {
 
         //Get config values
         BuildersHammer bHammer = BuildersHammer.getInstance();
-        boolean permission = bHammer.canEdit(stringID, playerComponent.getGameMode().name(), "");
-        if(!permission) return;
+        boolean permission = bHammer.canEdit(stringID, playerComponent.getGameMode().name(), "Rotate");
+        if(!permission) {
+            state.state = InteractionState.Failed;
+            return;
+        }
 
         boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
         if (!blockBreakingAllowed) return;
@@ -237,15 +235,10 @@ public class HammerRotation extends SimpleBlockInteraction {
         }
 
         //Remove old block data
-
         if (oldBlockRef != null && blockCompSection != null) {
             for (Vector3i pos : oldFootprint) {
                 int index = ChunkUtil.indexBlock(pos.x, pos.y, pos.z);
-                
-                // Clear from blockHolders map
                 blockCompSection.removeBlockHolder(index); 
-                
-                // Clear from blockReferences map (Crucial to prevent entity deletion!)
                 blockCompSection.removeBlockReference(index, oldBlockRef); 
             }
         }
@@ -261,8 +254,6 @@ public class HammerRotation extends SimpleBlockInteraction {
             }
         }
         BlockHarvestUtils.performBlockBreak(playerEntityRef, null, blocksToOverride, 0, entityStore, chkStoreStore);
-
-        world.sendMessage(Message.raw("Face: " + face + " - Axis: " + clickAxis + " - Setting: " + interactionSetting));
         
         Ref<ChunkStore> targetSectionRef = chkStore.getChunkSectionReferenceAtBlock(newRoot.x, newRoot.y, newRoot.z);
         if (targetSectionRef == null || !targetSectionRef.isValid()) {

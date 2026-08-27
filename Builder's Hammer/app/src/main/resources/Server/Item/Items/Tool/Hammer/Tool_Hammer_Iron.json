@@ -37,10 +37,6 @@
     ]
   },
   "MaxDurability": 500,
-  "Light": {
-    "Radius": 1,
-    "Color": "#ddd"
-  },
   "State": {
     "Cycle": "Tool_Hammer_Iron",
     "State": {
@@ -54,12 +50,6 @@
         },
         "Description": "server.items.BHP_StateHammer.description"
       },
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ],
       "Interactions": {
         "Primary": {
           "RequireNewClick": true,
@@ -104,12 +94,6 @@
       "Variant": true,
       "Icon": "Icons/ItemsGenerated/IronHammer/IronRotateIcon.png",
       "Texture": "Items/Tools/IronHammer/IronHammerRotateMode.png",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ],
       "Interactions": {
         "Primary": {
           "RequireNewClick": true,
@@ -146,32 +130,6 @@
         "Setting_3-Y Axis Lock": {},
         "Setting_4-Force Rotate": {}
       }
-    },
-    "Place": {
-      "Parent": "Tool_Hammer_Iron",
-      "TranslationProperties": {
-        "Name": "server.items.BHP_Iron_Builders_Hammer.name",
-        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
-        "NameArguments": {
-          "State": "Place"
-        }
-      },
-      "Quality": "Uncommon",
-      "Variant": true,
-      "Icon": "Icons/ItemsGenerated/IronHammer/IronPlaceIcon.png",
-      "Texture": "Items/Tools/IronHammer/IronHammerPlaceMode.png",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ]
     }
-  },
-  "HudUI": [
-    {
-      "Type": "Legend",
-      "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-    }
-  ]
+  }
 }

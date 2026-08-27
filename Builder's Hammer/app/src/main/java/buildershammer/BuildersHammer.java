@@ -22,13 +22,14 @@ public class BuildersHammer extends JavaPlugin{
         super(init);
         instance = this;
         LOGGER.atInfo().log("Plugin %s version %s initialized.", this.getName(),this.getManifest().getVersion().toString());
-        this.config = this.withConfig("BuildersHammerConfig", BuildersRootConfig.CODEC);
+        this.config = this.withConfig("BuildersHammerPlusConfig", BuildersRootConfig.CODEC);
+        
     }
 
     @Override
     protected void setup() {
         this.config.save();
-
+        
         // Interaction Initialization
         this.getCodecRegistry(Interaction.CODEC).register("BuilderRotateBlock", HammerRotation.class, HammerRotation.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("BuilderChangeState", HammerChangeState.class, HammerChangeState.CODEC);
@@ -37,16 +38,19 @@ public class BuildersHammer extends JavaPlugin{
         this.getCodecRegistry(Interaction.CODEC).register("BuilderModeSettings", HammerModeSettings.class, HammerModeSettings.CODEC);
         this.getCodecRegistry(Interaction.CODEC).register("AOEBlockSelect", AOEBlockSelection.class, AOEBlockSelection.CODEC);
     }
-    
-    //TODO - Refactor to use new config setup once it is made
-    public boolean canEdit(String blockID, String gamemode, String action){
+
+
+    public boolean canEdit(String blockID, String gamemode, String mode){
         BuildersRootConfig rootConfig = config.get();
-        if (gamemode.equals("Creative") && rootConfig.isCreativeBypassed()) return true;
+        rootConfig.buildCache();
+        
+        if (gamemode.equals("Creative") && rootConfig.isCreativeBypassed(mode)) return true;
+        
 
         if (blockID.startsWith("*")) blockID = blockID.substring(1);
         
         blockID = blockID.trim();
-        for (String id : rootConfig.getGlobalRestrictedBlocks()) {
+        for (String id : rootConfig.getRestrictedBlocks(mode)) {
             String regex = id.trim().replace("*", ".*");
 
             if (blockID.matches(regex)) {

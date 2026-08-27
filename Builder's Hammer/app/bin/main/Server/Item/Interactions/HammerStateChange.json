@@ -6,7 +6,19 @@
       "Effects": {
         "ItemAnimationId": "Mine"
       },
-      "UseLatestTarget": true
+      "UseLatestTarget": true,
+      "Failed": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Set_Mask"
+        }
+      },
+      "Next": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Add_Mask"
+        }
+      }
     },
     "1.0": {
       "Type": "AOEBlockSelect",
@@ -21,6 +33,13 @@
       "UseLatestTarget": true,
       "Effects": {
         "ItemAnimationId": "Mine"
+      },
+      "Filter Blocks": true,
+      "Failed": {
+        "Type": "Simple",
+        "Effects": {
+          "LocalSoundEventId": "SFX_Creative_Play_Set_Mask"
+        }
       }
     }
   },

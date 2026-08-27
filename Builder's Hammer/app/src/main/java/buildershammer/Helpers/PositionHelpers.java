@@ -24,7 +24,7 @@ public class PositionHelpers {
 
     public static List<Vector3i> generateCubePositions(@Nonnull final Vector3i centerPos, final int size, @Nonnull final World world, @Nullable final IntSet filteredBlockIDs){
         final List<Vector3i> positions = new ObjectArrayList<>();
-
+        // TODO - Swap to Set<>
         for (int dx = -size; dx <= size; dx++) {
             for (int dy = -size; dy <= size; dy++) {
                 for (int dz = -size; dz <= size; dz++) {

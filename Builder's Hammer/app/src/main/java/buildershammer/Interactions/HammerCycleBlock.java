@@ -31,9 +31,12 @@ import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+
+import buildershammer.BuildersHammer;
+
 import java.util.logging.Level;
 
-// Mostly yoinked from CycleBlockGroupInteraction.java, then updated with non deprecated methods and to work as a hammer function.
+// Mostly yoinked from CycleBlockGroupInteraction.java, then updated some deprecated methods and to work as a hammer function.
 public class HammerCycleBlock extends SimpleBlockInteraction {
             //Used as one part to register the interaction
     public static final BuilderCodec<HammerCycleBlock> CODEC = BuilderCodec.builder(
@@ -74,11 +77,23 @@ public class HammerCycleBlock extends SimpleBlockInteraction {
         final boolean blockBreakingAllowed = worldConfig.isBlockBreakingAllowed();
         if (!blockBreakingAllowed) return;
 
+        // Get the block ID, blockType, and stringID
+        int blockID = blockSection.get(blockPos.x, blockPos.y, blockPos.z);
+        BlockType blockType = BlockType.getAssetMap().getAsset(blockID);
+        String stringID = blockType.getId();
+
+        BuildersHammer bHammer = BuildersHammer.getInstance();
+        boolean permission = bHammer.canEdit(stringID, playerComponent.getGameMode().name(), "Cycle");
+        if(!permission) {
+            state.state = InteractionState.Failed;
+            return;
+        }
+
         final var blockIndex = blockSection.get(blockPos.x, blockPos.y, blockPos.z);
         final var targetBlockType = BlockType.getAssetMap().getAsset(blockIndex);
 
         if (targetBlockType == null) return;
-
+        
         final var targetBlockItem = targetBlockType.getItem();
 
         // TODO BlockGroup is deprecated, needs replacement once system is migrated in vanilla.

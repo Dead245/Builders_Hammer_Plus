@@ -110,12 +110,6 @@
         }
       },
       "Quality": "Common",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ],
       "Interactions": {
         "Primary": {
           "RequireNewClick": true,
@@ -160,12 +154,6 @@
       "Variant": true,
       "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudeRotateIcon.png",
       "Texture": "Items/Tools/CrudeHammer/CrudeHammerRotateMode.png",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ],
       "Interactions": {
         "Primary": {
           "RequireNewClick": true,
@@ -202,37 +190,7 @@
         "Setting_3-Y Axis Lock": {},
         "Setting_4-Force Rotate": {}
       }
-    },
-    "Place": {
-      "Parent": "Tool_Hammer_Crude",
-      "TranslationProperties": {
-        "Name": "server.items.BHP_Iron_Builders_Hammer.name",
-        "Description": "server.items.BHP_Iron_Builders_Hammer.description",
-        "NameArguments": {
-          "State": "Place"
-        }
-      },
-      "Quality": "Common",
-      "Variant": true,
-      "Icon": "Icons/ItemsGenerated/CrudeHammer/CrudePlaceIcon.png",
-      "Texture": "Items/Tools/CrudeHammer/CrudeHammerPlaceMode.png",
-      "HudUI": [
-        {
-          "Type": "Legend",
-          "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-        }
-      ]
     }
   },
-  "SubCategory": "",
-  "BuilderTool": {
-    "Id": "Hammer",
-    "IsBrush": false
-  },
-  "HudUI": [
-    {
-      "Type": "Legend",
-      "Path": "Hud/ToolsLegends/SelectionToolLegend.ui"
-    }
-  ]
+  "SubCategory": ""
 }

@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.hypixel.hytale.builtin.buildertools.utils.FillerPlacementUtil;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -21,7 +20,6 @@ import com.hypixel.hytale.protocol.BlockSoundEvent;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.StateData;
@@ -37,9 +35,9 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockOperations;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 
 import org.joml.Vector3i;
 
@@ -86,8 +84,8 @@ public class HammerChangeState extends SimpleBlockInteraction {
           }
         }
 
-        ChunkStore chkStore = world.getChunkStore();
-        Store<ChunkStore> chkStoreStore = chkStore.getStore();
+        final ChunkStore chkStore = world.getChunkStore();
+        final Store<ChunkStore> chkStoreStore = chkStore.getStore();
 
         long chunkIndex = ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z);
         Ref<ChunkStore> chunkReference = chkStore.getChunkReference(chunkIndex);
@@ -96,14 +94,20 @@ public class HammerChangeState extends SimpleBlockInteraction {
             return;
         }
 
-        WorldChunk worldChunkComponent = chkStoreStore.getComponent(chunkReference, WorldChunk.getComponentType());
+        final WorldChunk worldChunkComponent = chkStoreStore.getComponent(chunkReference, WorldChunk.getComponentType());
         assert worldChunkComponent != null;
         
-        BlockChunk blockChunkComponent = chkStoreStore.getComponent(chunkReference, BlockChunk.getComponentType());
+        final BlockChunk blockChunkComponent = chkStoreStore.getComponent(chunkReference, BlockChunk.getComponentType());
         assert blockChunkComponent != null;
 
-        // TODO - getBlockType() is deprecated, need replacement
-        BlockType blockType = worldChunkComponent.getBlockType(blockPos);
+        final var sectionRef = chkStore.getChunkSectionReferenceAtBlock(blockPos.x, blockPos.y, blockPos.z);
+        if (sectionRef == null || !sectionRef.isValid()) return;
+
+        final var blockSection = chkStoreStore.getComponent(sectionRef, BlockSection.getComponentType());
+        assert blockSection != null;
+
+        int blockID = blockSection.get(blockPos.x, blockPos.y, blockPos.z);
+        BlockType blockType = BlockType.getAssetMap().getAsset(blockID);
         
         //Make sure player can change/edit blocks first
         GameplayConfig gameplayConfig = world.getGameplayConfig();
@@ -114,10 +118,12 @@ public class HammerChangeState extends SimpleBlockInteraction {
             interactionState.state = InteractionState.Failed;
             return;
         }
-        
+
+        String stringID = blockType.getId();
+
         //Get config values
         BuildersHammer bHammer = BuildersHammer.getInstance();
-        boolean permission = bHammer.canEdit(blockType.getId(), playerComponent.getGameMode().name(), "");
+        boolean permission = bHammer.canEdit(stringID, playerComponent.getGameMode().name(), "State");
         if(!permission) {
             interactionState.state = InteractionState.Failed;
             return;
